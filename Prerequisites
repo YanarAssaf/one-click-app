@@ -1,0 +1,29 @@
+### Util
+	yum install htop bash-completion bash-completion-extras
+### Repo
+	yum install epel-release
+        rpm -Uvh http://packages.sw.be/rpmforge-release/rpmforge-release-0.5.2-2.el6.rf.x86_64.rpm
+
+        HP Repo	vi /etc/yum.repos.d/hp.repo
+        [HP-Proliant-spp]
+        name=HP Proliant spp Red Hat Enterprise Linux $releasever - $basearch
+        baseurl=http://downloads.linux.hpe.com/repo/spp/rhel/6.8/x86_64/current
+        enabled=1
+        gpgcheck=0
+        gpgkey=http://downloads.linux.hp.com/SDR/repo/spp/GPG-KEY-SPP
+
+### Nagios & snmp 
+        yum install nrpe nagios-plugins-all openssl net-snmp perl-Nagios-Plugin perl-Net-SNMP perl-Nagios-Plugin perl-Math-Round hp-health hpacucli
+
+### Secure SSH
+	used ssh key
+	edit sshd_config to
+	PasswordAuthentication no
+	RSAAuthentication yes
+	PubkeyAuthentication yes
+	ChallengeResponseAuthentication no
+	PermitEmptyPasswords no
+	UsePAM no 
+
+# Finnaly update OS
+        yum update
