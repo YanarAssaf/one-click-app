@@ -1,0 +1,69 @@
+*mangle
+:PREROUTING ACCEPT [295:20164]
+:INPUT ACCEPT [60:4827]
+:FORWARD ACCEPT [235:15337]
+:OUTPUT ACCEPT [139:13319]
+:POSTROUTING ACCEPT [373:28604]
+-A PREROUTING -p tcp -m tcp --tcp-flags FIN,SYN,RST,PSH,ACK,URG NONE -j DROP
+-A PREROUTING -p tcp -m tcp --tcp-flags FIN,SYN FIN,SYN -j DROP
+-A PREROUTING -p tcp -m tcp --tcp-flags SYN,RST SYN,RST -j DROP
+-A PREROUTING -p tcp -m tcp --tcp-flags FIN,RST FIN,RST -j DROP
+-A PREROUTING -p tcp -m tcp --tcp-flags FIN,ACK FIN -j DROP
+-A PREROUTING -p tcp -m tcp --tcp-flags ACK,URG URG -j DROP
+-A PREROUTING -p tcp -m tcp --tcp-flags FIN,ACK FIN -j DROP
+-A PREROUTING -p tcp -m tcp --tcp-flags PSH,ACK PSH -j DROP
+-A PREROUTING -p tcp -m tcp --tcp-flags FIN,SYN,RST,PSH,ACK,URG FIN,SYN,RST,PSH,ACK,URG -j DROP
+-A PREROUTING -p tcp -m tcp --tcp-flags FIN,SYN,RST,PSH,ACK,URG NONE -j DROP
+-A PREROUTING -p tcp -m tcp --tcp-flags FIN,SYN,RST,PSH,ACK,URG FIN,PSH,URG -j DROP
+-A PREROUTING -p tcp -m tcp --tcp-flags FIN,SYN,RST,PSH,ACK,URG FIN,SYN,PSH,URG -j DROP
+-A PREROUTING -p tcp -m tcp --tcp-flags FIN,SYN,RST,PSH,ACK,URG FIN,SYN,RST,ACK,URG -j DROP
+COMMIT
+#
+*filter
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
+:OUTPUT ACCEPT [4044:415503]
+:FW-LAN - [0:0]
+:FW-WAN - [0:0]
+:IN-LAN - [0:0]
+:IN-WAN - [0:0]
+:LOG-FW-LAN - [0:0]
+:LOG-FW-WAN - [0:0]
+:LOG-IN-LAN - [0:0]
+:LOG-IN-WAN - [0:0]
+-A INPUT -m conntrack --ctstate INVALID -j DROP
+-A INPUT -p tcp ! --syn -m state --state NEW -j DROP
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -i lo -j ACCEPT
+-A INPUT -i eno1 -j IN-LAN
+-A INPUT -i eno2 -j IN-WAN
+-A IN-LAN -p tcp -m state --state NEW -m tcp --dport 4022 -j ACCEPT
+-A IN-LAN -p tcp -m state --state NEW -m tcp --dport 9090 -j ACCEPT
+-A IN-LAN -m limit --limit 5/min --limit-burst 7 -j LOG-IN-LAN
+-A IN-LAN -j DROP
+-A IN-WAN -m limit --limit 5/min --limit-burst 7 -j LOG-IN-WAN
+-A IN-WAN -j DROP
+-A FORWARD -m conntrack --ctstate INVALID -j DROP
+-A FORWARD -p tcp ! --syn -m state --state NEW -j DROP
+-A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
+-A FORWARD -i eno1 -j FW-LAN
+-A FORWARD -i eno2 -j FW-WAN
+-A FW-LAN -p icmp -j ACCEPT
+-A FW-LAN -p tcp -m multiport --dports 80,443,53,110,995,587 -j ACCEPT
+-A FW-LAN -p udp -m multiport --dports 80,443,53,110,995,587 -j ACCEPT
+-A FW-LAN -m limit --limit 5/min --limit-burst 7 -j LOG-FW-LAN
+-A FW-LAN -j DROP
+-A FW-WAN -m limit --limit 5/min --limit-burst 7 -j LOG-FW-WAN
+-A FW-WAN -j DROP
+-A LOG-FW-LAN -j LOG --log-prefix "FW-LAN: "
+-A LOG-FW-WAN -j LOG --log-prefix "FW-WAN: "
+-A LOG-IN-LAN -j LOG --log-prefix "IN-LAN: "
+-A LOG-IN-WAN -j LOG --log-prefix "IN-WAN: "
+COMMIT
+*nat
+:PREROUTING ACCEPT [8397:554426]
+:INPUT ACCEPT [1:52]
+:OUTPUT ACCEPT [3:176]
+:POSTROUTING ACCEPT [0:0]
+-A POSTROUTING -o eno2 -j MASQUERADE
+COMMIT
