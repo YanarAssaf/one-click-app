@@ -43,10 +43,11 @@ systemctl stop firewalld && systemctl disable firewalld && systemctl mask firewa
 cecho "Download csf..." $boldyellow
 cd /usr/src/
 wget https://download.configserver.com/csf.tgz
-tar zxvf csf.tgz
+tar zxvf csf.tgz >/dev/null 2>&1
 cd csf
 cecho "Install csf..." $boldyellow
-sh install.sh
+sh install.sh >/dev/null 2>&1
+cecho "Testing csf..." $boldyellow
 perl /usr/local/csf/bin/csftest.pl
 cecho "Enable csf..." $boldyellow
 systemctl enable csf && systemctl enable lfd
