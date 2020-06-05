@@ -1,8 +1,8 @@
 #!/bin/bash
 
 ### VARIABLES ###
-PRE_PACK="wget vim gcc openssl-devel perl libxml2-devel libtool python-ply"
-VER="9.16.3"
+PRE_PACK="wget vim gcc openssl-devel perl libxml2-devel"
+VER="9.11.19"
 
 # Setup Colours
 black='\E[30;40m'
