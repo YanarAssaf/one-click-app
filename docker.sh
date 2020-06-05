@@ -38,11 +38,11 @@ cecho "Installing Prerequisite Packages..." $boldyellow
 yum install -y -q $PRE_PACK >/dev/null
 
 
-yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo >/dev/null
 cecho "Installing Docker..." $boldyellow
 yum -y -q install docker-ce docker-ce-cli containerd.io >/dev/null
 systemctl daemon-reload && systemctl restart docker 
-curl -L "https://github.com/docker/compose/releases/download/1.25.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+curl -L "https://github.com/docker/compose/releases/download/1.25.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose >/dev/null 2>&1
 chmod +x /usr/local/bin/docker-compose
 
 # Proxy
