@@ -43,7 +43,7 @@ cecho "Downloading BIND Packages..." $boldyellow
 wget -q -O bind-$VER.tar.xz https://downloads.isc.org/isc/bind9/$VER/bind-$VER.tar.xz
 if [ $? -eq 0 ]; then
     cecho "Done." $boldgreen
-    tar xzf bind-$VER.tar.gz
+    tar xf bind-$VER.tar.gz
 else
     cecho "Error: Check Your Internet Connection *_*" $boldred
     exit 1
