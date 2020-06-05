@@ -84,5 +84,6 @@ touch /var/lib/haproxy/stats                                                 # c
 cecho "checking config and starting service" $boldyellow
 service haproxy check # checking configuration file is valid
 chkconfig haproxy on  # setting haproxy to start with VM
+systemctl daemon-reload
 
 exit 0
