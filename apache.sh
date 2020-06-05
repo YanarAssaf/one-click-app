@@ -101,5 +101,5 @@ $(echo "^_^" >/var/www/yanarit.com/index.html)
 setenforce 0
 systemctl stop firewalld
 apachectl configtest
-systemctl start httpd
+systemctl start httpd && systemctl enable httpd
 exit 0
