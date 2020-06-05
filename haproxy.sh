@@ -73,17 +73,19 @@ id -u haproxy &>/dev/null || useradd -s /usr/sbin/nologin -r haproxy
 
 cecho "Creating config and Adding Daemon" $boldyellow
 
-cp /usr/local/sbin/haproxy* /usr/sbin/                                       # copy binaries to /usr/sbin
-cp /src/haproxy-$VER/examples/haproxy.init /etc/init.d/haproxy               # copy init script in /etc/init.d
-chmod +x /etc/init.d/haproxy                                                 # setting permission on init script
-mkdir -p /etc/haproxy                                                        # creating directory where the config file must reside
-cp /src/haproxy-$VER/examples/option-http_proxy.cfg /etc/haproxy/haproxy.cfg # copy example config file
-mkdir -p /var/lib/haproxy                                                    # create directory for stats file
-touch /var/lib/haproxy/stats                                                 # creating stats file
+cp /usr/local/sbin/haproxy* /usr/sbin/                                        # copy binaries to /usr/sbin
+#cp /src/haproxy-$VER/examples/haproxy.init /etc/init.d/haproxy               # copy init script in /etc/init.d
+#chmod +x /etc/init.d/haproxy                                                 # setting permission on init script
+cp /src/haproxy-$VER/contrib/systemd/haproxy.service.in /lib/systemd/system
+systemctl daemon-reload
+mkdir -p /etc/haproxy                                                         # creating directory where the config file must reside
+cp /src/haproxy-$VER/examples/option-http_proxy.cfg /etc/haproxy/haproxy.cfg  # copy example config file
+mkdir -p /var/lib/haproxy                                                     # create directory for stats file
+touch /var/lib/haproxy/stats                                                  # creating stats file
 
 cecho "checking config and starting service" $boldyellow
-service haproxy check # checking configuration file is valid
-chkconfig haproxy on  # setting haproxy to start with VM
-systemctl daemon-reload
+#service haproxy check # checking configuration file is valid
+#chkconfig haproxy on  # setting haproxy to start with VM
+systemctl enable haproxy && systemctl start haproxy
 
 exit 0
