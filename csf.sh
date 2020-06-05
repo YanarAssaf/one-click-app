@@ -2,7 +2,7 @@
 
 ### VARIABLES ###
 PRE_PACK="perl-libwww-perl"
-VER="2.4.43"
+VER=""
 
 # Setup Colours
 black='\E[30;40m'
