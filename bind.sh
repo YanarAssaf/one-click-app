@@ -2,7 +2,7 @@
 
 ### VARIABLES ###
 PRE_PACK="wget vim gcc openssl-devel perl libxml2-devel"
-VER="9.11.2"
+VER="9.16.3"
 
 # Setup Colours
 black='\E[30;40m'
@@ -40,7 +40,7 @@ mkdir -p /src
 cd /src
 
 cecho "Downloading BIND Packages..." $boldyellow
-wget -q -O bind-$VER.tar.gz https://www.isc.org/downloads/file/bind-$VER/
+wget -q -O bind-$VER.tar.xz https://downloads.isc.org/isc/bind9/$VER/bind-$VER.tar.xz
 if [ $? -eq 0 ]; then
     cecho "Done." $boldgreen
     tar xzf bind-$VER.tar.gz
@@ -51,7 +51,7 @@ fi
 
 cecho "=============================================================" $boldmagenta
 
-cd /src/bind-9.11.2
+cd /src/bind-$VER
 cecho "Starting configure..." $boldyellow
 ./configure --with-openssl --enable-threads --with-libxml2 --sysconfdir=/etc >/dev/null 2>&1
 if [ $? -eq 0 ]; then
