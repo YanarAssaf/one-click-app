@@ -40,7 +40,7 @@ yum install -y -q $PRE_PACK >/dev/null
 mkdir -p /src
 cd /src
 
-wget -q http://www.haproxy.org/download/2.1/src/haproxy-$VER.tar.gz
+wget -q https://www.haproxy.org/download/2.1/src/haproxy-$VER.tar.gz
 if [ $? -eq 0 ]; then
     cecho "Downloaded Complete" $boldgreen
     tar xzf haproxy-$VER.tar.gz && rm -f haproxy*.tar.gz
