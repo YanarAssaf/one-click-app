@@ -2,7 +2,7 @@
 
 ### VARIABLES ###
 PRE_PACK="wget vim autoconf libtool openssl-devel pcre-devel expat-devel"
-VER="2.4.38"
+VER="2.4.43"
 
 # Setup Colours
 black='\E[30;40m'
@@ -40,12 +40,12 @@ mkdir -p /src
 cd /src
 
 cecho "Downloading Apache Packages..." $boldyellow
-wget -q https://github.com/apache/httpd/archive/$VER.tar.gz && wget -q https://codeload.github.com/apache/apr/tar.gz/1.6.5 && wget -q https://github.com/apache/apr-util/archive/1.6.1.tar.gz
+wget -q https://github.com/apache/httpd/archive/$VER.tar.gz && wget -q https://codeload.github.com/apache/apr/tar.gz/1.7.0 && wget -q https://github.com/apache/apr-util/archive/1.6.1.tar.gz
 if [ $? -eq 0 ]
 then
         cecho "Done." $boldgreen
-        tar xzf $VER.tar.gz && tar xzf 1.6.0.tar.gz && tar xzf 1.6.2;
-		cp -R apr-1.6.5 httpd-$VER/srclib/apr && cp -R apr-util-1.6.1 httpd-$VER/srclib/apr-util ;
+        tar xzf $VER.tar.gz && tar xzf 1.6.1.tar.gz && tar xzf 1.7.0;
+		cp -R apr-1.7.0 httpd-$VER/srclib/apr && cp -R apr-util-1.6.1 httpd-$VER/srclib/apr-util ;
 else
         cecho "Error: Check Your Internet Connection *_*" $boldred
         exit 1
@@ -55,6 +55,7 @@ fi
 cecho "=============================================================" $boldmagenta
 
 cd /src/httpd-$VER
+./buildconf
 cecho "Starting configure..." $boldyellow
 ./configure --enable-ssl  --enable-so --enable-mpms-shared=all --with-included-apr --with-apr=/usr/local/apr/bin > /dev/null 2>&1
 if [ $? -eq 0 ]
