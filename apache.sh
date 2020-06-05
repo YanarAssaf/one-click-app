@@ -53,7 +53,7 @@ fi
 cecho "=============================================================" $boldmagenta
 
 cd /src/httpd-$VER
-./buildconf
+./buildconf >/dev/null 2>&1
 cecho "Starting configure..." $boldyellow
 ./configure --enable-ssl --enable-so --enable-mpms-shared=all --with-included-apr --with-apr=/usr/local/apr/bin >/dev/null 2>&1
 if [ $? -eq 0 ]; then
