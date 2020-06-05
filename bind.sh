@@ -53,7 +53,7 @@ cecho "=============================================================" $boldmagen
 
 cd /src/bind-$VER
 cecho "Starting configure..." $boldyellow
-./configure --enable-threads --sysconfdir=/etc >/dev/null 2>&1
+./configure >/dev/null 2>&1
 if [ $? -eq 0 ]; then
     cecho "Starting make..." $boldyellow
     $(make >/dev/null 2>&1)
