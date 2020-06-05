@@ -2,7 +2,7 @@
 
 ### VARIABLES ###
 PRE_PACK="make gcc"
-VER="1.8.4"
+VER="2.1.5"
 
 # Setup Colours
 black='\E[30;40m'
@@ -40,7 +40,7 @@ yum install -y -q $PRE_PACK > /dev/null
 mkdir -p /src
 cd /src
 
-wget -q http://www.haproxy.org/download/1.8/src/haproxy-$VER.tar.gz
+wget -q http://www.haproxy.org/download/2.1/src/haproxy-$VER.tar.gz
 if [ $? -eq 0 ]
 then
         cecho "Downloaded Complete" $boldgreen
