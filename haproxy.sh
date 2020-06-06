@@ -78,7 +78,7 @@ cp /usr/local/sbin/haproxy* /usr/sbin/                                        # 
 #cp /src/haproxy-$VER/examples/haproxy.init /etc/init.d/haproxy               # copy init script in /etc/init.d
 #chmod +x /etc/init.d/haproxy                                                 # setting permission on init script
 #cp /src/haproxy-$VER/contrib/systemd/haproxy.service.in /lib/systemd/system
-$(printf "[Unit]\nDescription=HAProxy Load Balancer\nAfter=network.target\n\n[Service]\nExecStartPre=/usr/sbin/haproxy -f /etc/haproxy/haproxy.cfg -c -q\nExecStart=/usr/sbin/haproxy -Ws -f $CONFIG -p /run/haproxy.pid\nExecReload=/usr/sbin/haproxy -f $CONFIG -c -q\nExecReload=/bin/kill -USR2 $MAINPID\nKillMode=mixed\nRestart=always\nSuccessExitStatus=143\nType=notify\n\n[Install]\nWantedBy=multi-user.target" >/usr/lib/systemd/system/haproxy.service)
+$(printf "[Unit]\nDescription=HAProxy Load Balancer\nAfter=network.target\n\n[Service]\nExecStartPre=/usr/sbin/haproxy -f /etc/haproxy/haproxy.cfg -c -q\nExecStart=/usr/sbin/haproxy -Ws -f /etc/haproxy/haproxy.cfg -p /run/haproxy.pid\nExecReload=/usr/sbin/haproxy -f /etc/haproxy/haproxy.cfg -c -q\nExecReload=/bin/kill -USR2 $MAINPID\nKillMode=mixed\nRestart=always\nSuccessExitStatus=143\nType=notify\n\n[Install]\nWantedBy=multi-user.target" >/usr/lib/systemd/system/haproxy.service)
 systemctl daemon-reload
 mkdir -p /etc/haproxy                                                         # creating directory where the config file must reside
 #cp /src/haproxy-$VER/examples/option-http_proxy.cfg /etc/haproxy/haproxy.cfg  # copy example config file
