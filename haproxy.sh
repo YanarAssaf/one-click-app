@@ -51,7 +51,8 @@ else
 fi
 
 cecho "Configuring and Making HAPROXY" $boldyellow
-make TARGET=linux-glibc CPU=x86_64
+make TARGET=linux-glibc CPU=x86_64 USE_SYSTEMD=1
+
 if [ $? -eq 0 ]; then
     cecho "Successfully Finshed From Combile" $boldgreen
 else
