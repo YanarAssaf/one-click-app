@@ -6,7 +6,7 @@
 Deploy Apps in One-Click throw a SHELL script. 
 Deploy popular applications such as Apache, BIND, Nginx, Nagios on CentOS7 with a single click.
 
-Feathers:
+Features:
 - Apache
 - Nagios
 - Docker
