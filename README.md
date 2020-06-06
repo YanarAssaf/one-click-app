@@ -23,7 +23,7 @@ Feathers:
 ## Contacts
 
 If you discover a security vulnerability within App, please send an e-mail to Yanar Assaf via [yanar@outlook.com](mailto:yanar@outlook.com).
-<p class="love">Made with <i class="icon ion-heart"></i> By Yanar</p>
+<p class="love">Made with <ion-icon name="heart"></ion-icon> By Yanar</p>
 
 ## License
 
