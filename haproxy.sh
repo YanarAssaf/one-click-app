@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ### VARIABLES ###
-PRE_PACK="make gcc"
+PRE_PACK="make gcc wget systemd-devel"
 VER="2.1.5"
 
 # Setup Colours
@@ -76,10 +76,12 @@ cecho "Creating config and Adding Daemon" $boldyellow
 cp /usr/local/sbin/haproxy* /usr/sbin/                                        # copy binaries to /usr/sbin
 #cp /src/haproxy-$VER/examples/haproxy.init /etc/init.d/haproxy               # copy init script in /etc/init.d
 #chmod +x /etc/init.d/haproxy                                                 # setting permission on init script
-cp /src/haproxy-$VER/contrib/systemd/haproxy.service.in /lib/systemd/system
+#cp /src/haproxy-$VER/contrib/systemd/haproxy.service.in /lib/systemd/system
+$(printf "[Unit]\nDescription=HAProxy Load Balancer\nAfter=network.target\n\n[Service]\nExecStartPre=/usr/sbin/haproxy -f /etc/haproxy/haproxy.cfg -c -q\nExecStart=/usr/sbin/haproxy -Ws -f $CONFIG -p /run/haproxy.pid\nExecReload=/usr/sbin/haproxy -f $CONFIG -c -q\nExecReload=/bin/kill -USR2 $MAINPID\nKillMode=mixed\nRestart=always\nSuccessExitStatus=143\nType=notify\n\n[Install]\nWantedBy=multi-user.target" >/usr/lib/systemd/system/haproxy.service)
 systemctl daemon-reload
 mkdir -p /etc/haproxy                                                         # creating directory where the config file must reside
-cp /src/haproxy-$VER/examples/option-http_proxy.cfg /etc/haproxy/haproxy.cfg  # copy example config file
+#cp /src/haproxy-$VER/examples/option-http_proxy.cfg /etc/haproxy/haproxy.cfg  # copy example config file
+$(printf "global\n\tdaemon\n\tmaxconn 524252\n\tulimit-n 1048563\n\tnbproc 15\n\ndefaults\n\ttimeout connect 5000ms\n\ttimeout client 50000ms\n\ttimeout server 50000ms\n\nlisten proxys\n\tmode tcp\n\tlog global\n\tbind :80\n\tmaxconn 524252\n\t#balance roundrobin\n\tbalance source\n\tbind-process all\n\toption http-keep-alive\n\toption nolinger\n\toption redispatch\n\tsource 0.0.0.0 usesrc clientip\n\tserver cache1 192.168.100.1:3129 check port 3129 inter 2000 fall 3\n\toption tcp-smart-accept\n\toption tcp-smart-connect\n\nlisten stats\n\tbind :8888\n\tmode http\n\tstats enable\n\tstats refresh 30s\n\tstats show-node\n\tstats auth admin:password\n\tstats uri  /" >/etc/haproxy/haproxy.cfg)
 mkdir -p /var/lib/haproxy                                                     # create directory for stats file
 touch /var/lib/haproxy/stats                                                  # creating stats file
 
