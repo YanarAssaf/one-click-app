@@ -89,15 +89,15 @@ mkdir /var/www
 chmod 755 /var/www
 chown root:root /var/www
 
-mkdir /var/www/yanarit.com
+mkdir /var/www/ex
 
-chown apache:apache /var/www/yanarit.com
+chown apache:apache /var/www/ex
 
-chmod 755 /var/www/yanarit.com
+chmod 755 /var/www/ex
 
-$(printf "<VirtualHost *:80>\nServerName yanarit.com\n\n# Directory settings\nDocumentRoot /var/www/yanarit.com\n<Directory /var/www/yanarit.com>\nAllowOverride All\nRequire all granted\nOptions +FollowSymLinks -Indexes -Includes\n</Directory>\n\n# Logging\nErrorLog "/var/www/yanarit.com/httpd-error.log"\nCustomLog "/var/www/yanarit.com/httpd-access.log" common\n\n</VirtualHost>" >/usr/local/apache2/conf/extra/httpd-vhosts.conf)
+$(printf "<VirtualHost *:80>\nServerName yanarit.com\n\n# Directory settings\nDocumentRoot /var/www/ex\n<Directory /var/www/ex>\nAllowOverride All\nRequire all granted\nOptions +FollowSymLinks -Indexes -Includes\n</Directory>\n\n# Logging\nErrorLog "/var/www/ex/httpd-error.log"\nCustomLog "/var/www/ex/httpd-access.log" common\n\n</VirtualHost>" >/usr/local/apache2/conf/extra/httpd-vhosts.conf)
 
-$(echo "^_^" >/var/www/yanarit.com/index.html)
+$(echo "^_^" >/var/www/ex/index.html)
 setenforce 0
 systemctl stop firewalld
 apachectl configtest
