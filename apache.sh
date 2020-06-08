@@ -95,7 +95,7 @@ chown apache:apache /var/www/ex
 
 chmod 755 /var/www/ex
 
-$(printf "<VirtualHost *:80>\nServerName yanarit.com\n\n# Directory settings\nDocumentRoot /var/www/ex\n<Directory /var/www/ex>\nAllowOverride All\nRequire all granted\nOptions +FollowSymLinks -Indexes -Includes\n</Directory>\n\n# Logging\nErrorLog "/var/www/ex/httpd-error.log"\nCustomLog "/var/www/ex/httpd-access.log" common\n\n</VirtualHost>" >/usr/local/apache2/conf/extra/httpd-vhosts.conf)
+$(printf "<VirtualHost *:80>\nServerName yanar.ex\n\n# Directory settings\nDocumentRoot /var/www/ex\n<Directory /var/www/ex>\nAllowOverride All\nRequire all granted\nOptions +FollowSymLinks -Indexes -Includes\n</Directory>\n\n# Logging\nErrorLog "/var/www/ex/httpd-error.log"\nCustomLog "/var/www/ex/httpd-access.log" common\n\n</VirtualHost>" >/usr/local/apache2/conf/extra/httpd-vhosts.conf)
 
 $(echo "^_^" >/var/www/ex/index.html)
 setenforce 0
