@@ -80,7 +80,7 @@ kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documen
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.4.0/aio/deploy/recommended.yaml >/dev/null 2>&1
 kubectl --namespace kubernetes-dashboard patch svc kubernetes-dashboard -p '{"spec": {"type": "NodePort"}}' >/dev/null 2>&1
 kubectl get svc -n kubernetes-dashboard kubernetes-dashboard -o yaml > kubernetes-dashboard.yml
-sed -i 's/nodePort: \b[0-9]\{5\}\b/nodePort: 30000/g' kubernetes-dashboard.yml
+sed -i 's/nodePort: \b[0-9]\{5\}\b/nodePort: 30030/g' kubernetes-dashboard.yml
 kubectl -n kubernetes-dashboard patch svc kubernetes-dashboard --patch "$(cat kubernetes-dashboard.yml)" >/dev/null 2>&1
 
 cat <<EOF > ./admin.yml
@@ -109,7 +109,7 @@ kubectl apply -f ./admin.yml >/dev/null 2>&1
 cecho "token is created, you can access your Kubernetes Dashboard with it..." $boldyellow
 kubectl -n kubernetes-dashboard get secret $(kubectl -n kubernetes-dashboard get sa/admin-user -o jsonpath="{.secrets[0].name}") -o go-template="{{.data.token | base64decode}}"
 
-cecho "Kubernetes Dashboard https://master:30000..." $boldyellow
+cecho "Kubernetes Dashboard https://master:30030..." $boldyellow
 cecho "token is created, you can access your Kubernetes Dashboard with it..." $boldyellow
 
 exit 0
