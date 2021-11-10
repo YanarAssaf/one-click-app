@@ -108,7 +108,7 @@ EOF
 kubectl apply -f ./admin.yml >/dev/null 2>&1
 cecho "token is created, you can access your Kubernetes Dashboard with it..." $boldyellow
 kubectl -n kubernetes-dashboard get secret $(kubectl -n kubernetes-dashboard get sa/admin-user -o jsonpath="{.secrets[0].name}") -o go-template="{{.data.token | base64decode}}"
-
+cecho '\n'
 cecho "Kubernetes Dashboard https://master:30030..." $boldyellow
 cecho "token is created, you can access your Kubernetes Dashboard with it..." $boldyellow
 
