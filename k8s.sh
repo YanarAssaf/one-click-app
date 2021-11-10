@@ -88,29 +88,28 @@ cat <<EOF > ./admin.yml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: yanar-admin
-  namespace: kube-system
+  name: admin-user
+  namespace: kubernetes-dashboard
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: yanar-admin
+  name: admin-user
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: cluster-admin
 subjects:
-  - kind: ServiceAccount
-    name: yanar-admin
-    namespace: kube-system
+- kind: ServiceAccount
+  name: admin-user
+  namespace: kubernetes-dashboard
 EOF
 
 kubectl apply -f ./admin.yml >/dev/null 2>&1
-SA_NAME="yanar-admin"
 cecho "token is created, you can access your Kubernetes Dashboard with it..." $boldyellow
-kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep ${SA_NAME} | awk '{print $1}')
+kubectl -n kubernetes-dashboard get secret $(kubectl -n kubernetes-dashboard get sa/admin-user -o jsonpath="{.secrets[0].name}") -o go-template="{{.data.token | base64decode}}"
 
-cecho "Kubernetes Dashboard http://master:3000..." $boldyellow
+cecho "Kubernetes Dashboard https://master:30000..." $boldyellow
 cecho "token is created, you can access your Kubernetes Dashboard with it..." $boldyellow
 
 exit 0
