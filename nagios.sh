@@ -1,8 +1,8 @@
 #!/bin/bash
 
 ### VARIABLES ###
-PRE_PACK="wget httpd php gcc glibc glibc-common gd gd-devel make net-snmp unzip"
-VER="4.3.1"
+PRE_PACK="yum-utils gcc glibc glibc-common wget unzip httpd php gd gd-devel perl postfix wget vim htop mtr ntp rsync bash-completion nrpe nagios-plugins-all check_nrpe" 
+VER=""
 
 # Setup Colours
 black='\E[30;40m'
@@ -25,72 +25,56 @@ boldwhite='\E[1;37;40m'
 
 Reset="tput sgr0"
 
-cecho ()
-{
-message=$1
-color=$2
-echo -e "$color$message" ; $Reset
+cecho() {
+    message=$1
+    color=$2
+    echo -e "$color$message"
+    $Reset
+    return
 }
 clear
 
-cecho "Installating PRE_PACK....." $boldyellow
-yum -y -q install $PRE_PACK > /dev/null
+cecho "Disable Firewall & SELinux..." $boldyellow
+systemctl stop firewalld && systemctl disable firewalld
+setenforce 0
+sed -i --follow-symlinks 's/SELINUX=permissive/SELINUX=disabled/g' /etc/sysconfig/selinux
 
-mkdir -p /src
-cd /src
+cecho "Installing Prerequisite Packages..." $boldyellow
+yum install -y -q epel-release >/dev/null
+yum install -y -q $PRE_PACK >/dev/null
 
 
-#wget https://assets.nagios.com/downloads/nagioscore/releases/nagios-$VER.tar.gz
-torify wget https://assets.nagios.com/downloads/nagioscore/releases/nagios-$VER.tar.gz > /dev/null
+cecho "Download & Configure Nagios ..." $boldyellow
+cd /tmp
+wget -q -O nagioscore.tar.gz https://github.com/NagiosEnterprises/nagioscore/archive/nagios-4.4.6.tar.gz >/dev/null
+tar xzf nagioscore.tar.gz >/dev/null
+cd /tmp/nagioscore-nagios-4.4.6/
+./configure > /dev/null
 if [ $? -eq 0 ]
 then
-    cecho "Downloaded Complete" $boldgreen
-    tar xzf nagios-$VER.tar.gz && rm -f nagios*.tar.gz;
-    cd nagios-$VER
+    cecho "Download & configure has been completed" $boldgreen
 else
-    cecho "Not Downloaded The File Check Your Internet Connection" $boldred
+    cecho "Download or configure failed" $boldred
     exit 1
 fi
 
-cecho "Adding Nagios User" $boldyellow
-useradd  nagios
-groupadd nagcmd
-usermod -a -G nagcmd nagios
-usermod -a -G nagios,nagcmd apache
-
-
-cecho "Compile Nagios ..." $boldyellow
-./configure --with-command-group=nagcmd > /dev/null
-if [ $? -eq 0 ]
-then
-    cecho "Compile Complete" $boldgreen
-else
-    cecho "Error in compile process please recheck PRE_PACK" $boldred
-    exit 1
-fi
-
-cecho "Installating Nagios ..." $boldyellow
-make_nagios=(all install install-init install-config install-commandmode install-webconf)
+cecho "Compiling and Installing Nagios  ..." $boldyellow
+make_nagios=(all install-groups-users install install-daemoninit install-commandmode install-config install-webconf)
 for x in "${make_nagios[@]}"
 do
 make $x > /dev/null
 if [ $? -eq 0 ]
 then
-    cecho "Install Complete $x" $boldgreen
+    cecho "Compile Complete $x" $boldgreen
 else
-    cecho "Error in Install process please recheck Compile" $boldred
+    cecho "Faild to compile $x" $boldred
 exit 1
 fi
 done
 
-cecho "Copy configure" $boldyellow
-cp -R contrib/eventhandlers/ /usr/local/nagios/libexec/
-chown -R nagios:nagios /usr/local/nagios/libexec/eventhandlers
-/usr/local/nagios/bin/nagios -v /usr/local/nagios/etc/nagios.cfg
+usermod -a -G nagios apache
 
-cecho "Start Services" $boldyellow
-/etc/init.d/nagios start
-/etc/init.d/httpd start
+systemctl enable httpd.service; systemctl enable nagios.service; systemctl restart httpd.service; systemctl restart nagios.service
 
 cecho "Create Nagios Admin" $boldyellow
 htpasswd -cb /usr/local/nagios/etc/htpasswd.users nagiosadmin nagiosadmin
