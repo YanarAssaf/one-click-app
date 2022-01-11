@@ -77,7 +77,7 @@ route:
 receivers:
 - name: 'email'
   email_configs:
-  - to: 'noc.mgr@runnet.local'
+  - to: 'MAIL'
 EOF
 
 sed -i '4i \rule_files:\n  - rules.yml\n' /etc/prometheus/prometheus.yml
