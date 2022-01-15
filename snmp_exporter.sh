@@ -51,15 +51,15 @@ EOF
 
 cat <<EOF > /etc/prometheus/prometheus.yml
 global:
-  scrape_interval: 15s
+  scrape_interval: 60s
 
 scrape_configs:
   - job_name: 'node'
-    scrape_interval: 5s
     static_configs:
       - targets: ['prometheus:9100']
 
   - job_name: 'snmp'
+    scrape_timeout: 1m
     static_configs:
       - targets:
         - switch.local # SNMP device.
