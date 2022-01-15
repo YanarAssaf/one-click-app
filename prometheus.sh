@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ### VARIABLES ###
-PRE_PACK="wget vim htop mtr ntp bash-completion" 
+PRE_PACK="wget vim htop mtr ntp rsync bash-completion" 
 VER=""
 
 # Setup Colours
@@ -40,23 +40,22 @@ cecho "Downloading and installing Prometheus..." $boldyellow
 wget https://github.com/prometheus/prometheus/releases/download/v2.32.1/prometheus-2.32.1.linux-amd64.tar.gz >/dev/null
 tar -xvzf prometheus-2.32.1.linux-amd64.tar.gz >/dev/null
 
-cp prometheus-2.32.1.linux-amd64/prometheus /usr/local/bin/ ; cp prometheus-2.32.1.linux-amd64/promtool /usr/local/bin/
-cp -r prometheus-2.32.1.linux-amd64/consoles /etc/prometheus; cp -r prometheus-2.32.1.linux-amd64/console_libraries /etc/prometheus
+mv prometheus-2.32.1.linux-amd64/{prometheus,promtool} /usr/local/bin/ 
+mv prometheus-2.32.1.linux-amd64/{consoles,console_libraries} /etc/prometheus
 cecho "Download & install has been completed" $boldgreen
 
 cat <<EOF > /etc/prometheus/prometheus.yml
 global:
-  scrape_interval: 15s
+  scrape_interval: 60s
 
 scrape_configs:
   - job_name: 'node'
-    scrape_interval: 5s
     static_configs:
       - targets: ['localhost:9090']
 EOF
 
 chown -R prometheus:prometheus /etc/prometheus ; chown prometheus:prometheus /var/lib/prometheus 
-chown prometheus:prometheus /usr/local/bin/prometheus; chown prometheus:prometheus /usr/local/bin/promtool
+chown prometheus:prometheus /usr/local/bin/{prometheus,promtool}
 
 cat <<EOF > /etc/systemd/system/prometheus.service
 [Unit]
@@ -73,7 +72,8 @@ ExecStart=/usr/local/bin/prometheus \
 --storage.tsdb.path /var/lib/prometheus/ \
 --web.console.templates=/etc/prometheus/consoles \
 --web.console.libraries=/etc/prometheus/console_libraries \
---storage.tsdb.retention.time=1y
+--storage.tsdb.retention.time=3m \
+--enable-feature=memory-snapshot-on-shutdown
 
 [Install]
 WantedBy=multi-user.target
