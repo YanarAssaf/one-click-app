@@ -72,7 +72,7 @@ ExecStart=/usr/local/bin/prometheus \
 --storage.tsdb.path /var/lib/prometheus/ \
 --web.console.templates=/etc/prometheus/consoles \
 --web.console.libraries=/etc/prometheus/console_libraries \
---storage.tsdb.retention.time=3m \
+--storage.tsdb.retention.time=100d \
 --enable-feature=memory-snapshot-on-shutdown
 
 [Install]
