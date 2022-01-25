@@ -43,6 +43,21 @@ tar zxvf csf.tgz >/dev/null 2>&1
 cd /tmp/csf
 sh install.sh >/dev/null 2>&1
 perl /usr/local/csf/bin/csftest.pl
+sed -i 's|TESTING = "1"|TESTING = "0"|g' /etc/csf/csf.conf
+sed -i 's|PORTFLOOD = ""|PORTFLOOD = "80;tcp;50;10"|g' /etc/csf/csf.conf
+sed -i 's|CONNLIMIT = ""|CONNLIMIT = "80;10"|g' /etc/csf/csf.conf
+sed -i 's|CT_LIMIT = "0"|CT_LIMIT = "100"|g' /etc/csf/csf.conf
 systemctl enable csf ; systemctl enable lfd
 systemctl restart csf ; systemctl restart lfd
-cecho "Download & install has been completed" $boldgreen
+cecho "Download & install has been completed\n" $boldgreen
+cecho " Adv security settings /etc/csf/csf.conf
+Port Flood Protection: PORTFLOOD
+Connection Limit Protection: CONNLIMIT
+Connection Tracking: CT_LIMIT\n" $boldmagenta
+cecho "Useful csf command options
+Block an IP with CSF: csf -d < IP Address >
+Allow an IP with CSF: csf -a < IP Address >
+Unblock an IP with CSF: csf -dr < IP Address >
+Unblock a temporarily blocked IP with CSF: csf -tr < IP Address >
+Search IP Address: csf -g < IP Address >
+" $boldwhite
