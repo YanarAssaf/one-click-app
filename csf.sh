@@ -1,19 +1,10 @@
 #!/bin/bash
 
 ### VARIABLES ###
-PRE_PACK="perl-libwww-perl"
-VER=""
+EXT_PACK="wget vim net-tools htop mtr ntp rsync bash-completion bash-completion-extras"
+PRE_PACK="iptables-services perl-libwww-perl"
 
 # Setup Colours
-black='\E[30;40m'
-red='\E[31;40m'
-green='\E[32;40m'
-yellow='\E[33;40m'
-blue='\E[34;40m'
-magenta='\E[35;40m'
-cyan='\E[36;40m'
-white='\E[37;40m'
-
 boldblack='\E[1;30;40m'
 boldred='\E[1;31;40m'
 boldgreen='\E[1;32;40m'
@@ -34,22 +25,24 @@ cecho() {
 }
 clear
 
+setenforce 0
+sed -i --follow-symlinks 's/SELINUX=permissive/SELINUX=disabled/g' /etc/sysconfig/selinux
+
+cecho "Uninstall Firewalld..." $boldyellow
+yum -y remove firewalld
+
 cecho "Installing Prerequisite Packages..." $boldyellow
+yum install -y -q epel-release >/dev/null
+yum install -y -q $EXT_PACK >/dev/null
 yum install -y -q $PRE_PACK >/dev/null
 
-cecho "Disable Firewalld..." $boldyellow
-systemctl stop firewalld && systemctl disable firewalld && systemctl mask firewalld
-
-cecho "Download csf..." $boldyellow
-cd /usr/src/
+cecho "Downloading and installing CSF..." $boldyellow
+cd /tmp
 wget https://download.configserver.com/csf.tgz
 tar zxvf csf.tgz >/dev/null 2>&1
-cd csf
-cecho "Install csf..." $boldyellow
+cd /tmp/csf
 sh install.sh >/dev/null 2>&1
-cecho "Testing csf..." $boldyellow
 perl /usr/local/csf/bin/csftest.pl
-cecho "Enable csf..." $boldyellow
-systemctl enable csf && systemctl enable lfd
-systemctl restart csf && systemctl restart lfd
-cecho "Installation Completed" $green
+systemctl enable csf ; systemctl enable lfd
+systemctl restart csf ; systemctl restart lfd
+cecho "Download & install has been completed" $boldgreen
