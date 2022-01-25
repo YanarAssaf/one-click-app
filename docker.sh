@@ -1,19 +1,10 @@
 #!/bin/bash
 
 ### VARIABLES ###
+EXT_PACK="wget vim net-tools htop mtr ntp rsync bash-completion bash-completion-extras" 
 PRE_PACK="yum-utils"
-VER=""
 
 # Setup Colours
-black='\E[30;40m'
-red='\E[31;40m'
-green='\E[32;40m'
-yellow='\E[33;40m'
-blue='\E[34;40m'
-magenta='\E[35;40m'
-cyan='\E[36;40m'
-white='\E[37;40m'
-
 boldblack='\E[1;30;40m'
 boldred='\E[1;31;40m'
 boldgreen='\E[1;32;40m'
@@ -35,6 +26,8 @@ cecho() {
 clear
 
 cecho "Installing Prerequisite Packages..." $boldyellow
+yum install -y -q epel-release >/dev/null
+yum install -y -q $EXT_PACK >/dev/null
 yum install -y -q $PRE_PACK >/dev/null
 
 
