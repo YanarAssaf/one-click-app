@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ### VARIABLES ###
-EXT_PACK="wget vim net-tools htop mtr ntp rsync bash-completion bash-completion-extra" 
+EXT_PACK="wget vim net-tools htop mtr ntp rsync bash-completion bash-completion-extras" 
 PRE_PACK="autoconf libtool openssl-devel pcre-devel expat-devel"
 VER="2.4.52"
 
