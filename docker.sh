@@ -29,7 +29,7 @@ setenforce 0
 sed -i --follow-symlinks 's/SELINUX=permissive/SELINUX=disabled/g' /etc/sysconfig/selinux
 sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 swapoff -a
-yum -y remove firewalld
+yum -y remove firewalld >/dev/null
 
 cecho "Installing Prerequisite Packages..." $boldyellow
 yum install -y -q epel-release >/dev/null
