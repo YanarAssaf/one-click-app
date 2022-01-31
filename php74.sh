@@ -28,9 +28,9 @@ cecho "Installing Prerequisite Packages..." $boldyellow
 yum install -y -q $PRE_PACK >/dev/null
 
 #Apache Setting
-$(sed -i 's|#LoadModule proxy_module modules\/mod_proxy.so|LoadModule proxy_module modules\/mod_proxy.so|g' /usr/local/apache2/conf/httpd.conf)
-$(sed -i 's|#LoadModule proxy_fcgi_module modules\/mod_proxy_fcgi.so|LoadModule proxy_fcgi_module modules\/mod_proxy_fcgi.so|g' /usr/local/apache2/conf/httpd.conf)
-$(sed -i 's|#LoadModule rewrite_module modules/mod_rewrite.so|LoadModule rewrite_module modules\/mod_rewrite.so|g' /usr/local/apache2/conf/httpd.conf)
+sed -i 's|#LoadModule proxy_module modules\/mod_proxy.so|LoadModule proxy_module modules\/mod_proxy.so|g' /etc/httpd/httpd.conf
+sed -i 's|#LoadModule proxy_fcgi_module modules\/mod_proxy_fcgi.so|LoadModule proxy_fcgi_module modules\/mod_proxy_fcgi.so|g' /etc/httpd/httpd.conf
+sed -i 's|#LoadModule rewrite_module modules/mod_rewrite.so|LoadModule rewrite_module modules\/mod_rewrite.so|g' /etc/httpd/httpd.conf
 
 cecho "Setup Apache setting with fpm" $boldyellow
 cecho '
