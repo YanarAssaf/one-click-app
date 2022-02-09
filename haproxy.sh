@@ -54,7 +54,7 @@ cecho "Download & install has been completed" $boldgreen
 
 useradd -s /usr/sbin/nologin -r haproxy
 ln -s /usr/local/sbin/haproxy /usr/sbin/haproxy
-cp /tmp/haproxy-$VER/admin/systemd/haproxy.service.in /usr/lib/systemd/system
+cp /tmp/haproxy-$VER/admin/systemd/haproxy.service.in /usr/lib/systemd/system/haproxy.service
 mkdir -p /etc/haproxy
 mkdir -p /var/lib/haproxy   
 touch /var/lib/haproxy/stats 
