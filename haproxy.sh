@@ -59,7 +59,7 @@ mkdir -p /etc/haproxy
 mkdir -p /var/lib/haproxy   
 touch /var/lib/haproxy/stats 
 
-$(printf "global\n\tdaemon\n\tmaxconn 524252\n\tulimit-n 1048563\n\tnbproc 15\n\ndefaults\n\ttimeout connect 5000ms\n\ttimeout client 50000ms\n\ttimeout server 50000ms\n\nlisten proxys\n\tmode tcp\n\tlog global\n\tbind :80\n\tmaxconn 524252\n\t#balance roundrobin\n\tbalance source\n\tbind-process all\n\toption http-keep-alive\n\toption nolinger\n\toption redispatch\n\tsource 0.0.0.0 usesrc clientip\n\tserver cache1 192.168.100.1:3129 check port 3129 inter 2000 fall 3\n\toption tcp-smart-accept\n\toption tcp-smart-connect\n\nlisten stats\n\tbind :8888\n\tmode http\n\tstats enable\n\tstats refresh 30s\n\tstats show-node\n\tstats auth admin:password\n\tstats uri  /" >/etc/haproxy/haproxy.cfg)
+printf "global\n\tdaemon\n\tmaxconn 524252\n\tulimit-n 1048563\n\tnbproc 15\n\ndefaults\n\ttimeout connect 5000ms\n\ttimeout client 50000ms\n\ttimeout server 50000ms\n\nlisten proxys\n\tmode tcp\n\tlog global\n\tbind :80\n\tmaxconn 524252\n\t#balance roundrobin\n\tbalance source\n\tbind-process all\n\toption http-keep-alive\n\toption nolinger\n\toption redispatch\n\tsource 0.0.0.0 usesrc clientip\n\tserver cache1 192.168.100.1:3129 check port 3129 inter 2000 fall 3\n\toption tcp-smart-accept\n\toption tcp-smart-connect\n\nlisten stats\n\tbind :8888\n\tmode http\n\tstats enable\n\tstats refresh 30s\n\tstats show-node\n\tstats auth admin:password\n\tstats uri  /" >/etc/haproxy/haproxy.cfg
 
 systemctl daemon-reload
 systemctl enable haproxy
