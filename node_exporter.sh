@@ -28,11 +28,11 @@ clear
 
 cecho "Downloading and instaling node_exporter..." $boldyellow
 
-wget -q https://github.com/prometheus/node_exporter/releases/download/v1.3.1/node_exporter-1.3.1.linux-amd64.tar.gz >/dev/null
+wget -q https://github.com/prometheus/node_exporter/releases/download/v1.4.0/node_exporter-1.4.0.linux-amd64.tar.gz >/dev/null
 
-tar zxvf node_exporter-1.3.1.linux-amd64.tar.gz >/dev/null
+tar zxvf node_exporter-1.4.0.linux-amd64.tar.gz >/dev/null
 useradd -rs /bin/false nodeusr
-mv node_exporter-1.3.1.linux-amd64/node_exporter /usr/local/bin/
+mv node_exporter-1.4.0.linux-amd64/node_exporter /usr/local/bin/
 
 cecho "Download & install has been completed" $boldgreen
 
