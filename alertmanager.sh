@@ -29,12 +29,12 @@ clear
 cecho "Downloading and installing Prometheus..." $boldyellow
 
 useradd --no-create-home --shell /bin/false alertmanager
-wget https://github.com/prometheus/alertmanager/releases/download/v0.23.0/alertmanager-0.23.0.linux-amd64.tar.gz >/dev/null
-tar zxvf alertmanager-0.23.0.linux-amd64.tar.gz
+wget https://github.com/prometheus/alertmanager/releases/download/v0.24.0/alertmanager-0.24.0.linux-amd64.tar.gz >/dev/null
+tar zxvf alertmanager-0.24.0.linux-amd64.tar.gz
 
 mkdir -p /etc/alertmanager
-mv alertmanager-0.23.0.linux-amd64/{alertmanager,amtool} /usr/local/bin/
-mv alertmanager-0.23.0.linux-amd64/alertmanager.yml /etc/alertmanager
+mv alertmanager-0.24.0.linux-amd64/{alertmanager,amtool} /usr/local/bin/
+mv alertmanager-0.24.0.linux-amd64/alertmanager.yml /etc/alertmanager
 chown alertmanager:alertmanager /usr/local/bin/{alertmanager,amtool}
 chown -R alertmanager:alertmanager /etc/alertmanager/
 
