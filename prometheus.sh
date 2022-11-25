@@ -40,8 +40,8 @@ cecho "Downloading and installing Prometheus..." $boldyellow
 wget https://github.com/prometheus/prometheus/releases/download/v2.40.2/prometheus-2.40.2.linux-amd64.tar.gz >/dev/null
 tar -xvzf prometheus-2.40.2.linux-amd64.tar.gz >/dev/null
 
-mv prometheus-2.40.2.linux-amd64.tar.gz/{prometheus,promtool} /usr/local/bin/ 
-mv prometheus-2.40.2.linux-amd64.tar.gz/{consoles,console_libraries} /etc/prometheus
+mv prometheus-2.40.2.linux-amd64/{prometheus,promtool} /usr/local/bin/ 
+mv prometheus-2.40.2.linux-amd64/{consoles,console_libraries} /etc/prometheus
 cecho "Download & install has been completed" $boldgreen
 
 cat <<EOF > /etc/prometheus/prometheus.yml
