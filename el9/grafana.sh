@@ -31,13 +31,13 @@ name=grafana
 baseurl=https://rpm.grafana.com
 repo_gpgcheck=1
 enabled=1
-gpgcheck=1
+gpgcheck=0
 gpgkey=https://rpm.grafana.com/gpg.key
 sslverify=1
 sslcacert=/etc/pki/tls/certs/ca-bundle.crt
 EOF
 
 cecho "Downloading and instaling Grafana..." $boldyellow
-yum -y -q install grafana >/dev/null
+dnf -y -q install grafana >/dev/null
 systemctl enable grafana-server
 cecho "Download & install has been completed" $boldgreen
