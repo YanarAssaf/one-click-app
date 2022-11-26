@@ -75,5 +75,5 @@ scrape_configs:
         replacement: 127.0.0.1:9116
 EOF
 
-sed -i '6085i \ \ version: 2\n  auth:\n    community: '$COMMUNITY'' /etc/prometheus/snmp.yml
+sed -i '7795i \ \ version: 2\n  auth:\n    community: '$COMMUNITY'' /etc/prometheus/snmp.yml
 systemctl enable snmp-exporter.service
