@@ -15,6 +15,8 @@ Features:
 | BIND        | :white_check_mark:       | :x: 
 | CSF        | :white_check_mark:       | :x:  
 | HAProxy        | :white_check_mark:       | :x:   
+|  Prometheus | :white_check_mark:       | :white_check_mark: 
+|  Grafana | :white_check_mark:       | :white_check_mark: 
 
 
 ## Clone
