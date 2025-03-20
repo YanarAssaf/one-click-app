@@ -9,12 +9,12 @@ Deploy popular applications on Enterprise Linux el7 & el9 with a single click.
 Features:
 | App              | EL7           | EL9                   
 | :------------------ | :------------------- | :-------------- 
-| Apache        | 192.168.66.254       | <ul><li>- [x] </li></ul>
-| Docker        | 192.168.66.254       | <ul><li>- [ ] </li></ul>  
-| Nginx        | 192.168.66.254       | :white_check_mark:  
-| BIND        | 192.168.66.254       | :x: 
-| CSF        | 192.168.66.254       | admin  
-| HAProxy        | 192.168.66.254       | admin  
+| Apache        | :white_check_mark:       | :white_check_mark:  
+| Docker        | :white_check_mark:       | :x: 
+| Nginx        | :white_check_mark:       | :white_check_mark:  
+| BIND        | :white_check_mark:       | :x: 
+| CSF        | :white_check_mark:       | :x:  
+| HAProxy        | :white_check_mark:       | :x:   
 
 
 ## Clone
