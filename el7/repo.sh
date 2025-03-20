@@ -23,8 +23,7 @@ sed -i -e '/^mirrorlist/d;/^#baseurl=/{s,^#,,;s,/mirror,/vault,;}' /etc/yum.repo
 
 cecho "Install has been completed" $boldgreen
 
-cecho 
-"
+: '
 wget vim net-tools htop mtr ntp rsync bash-completion bash-completion-extras
 ### Secure SSH
 	used ssh key
@@ -35,6 +34,6 @@ wget vim net-tools htop mtr ntp rsync bash-completion bash-completion-extras
 	ChallengeResponseAuthentication no
 	PermitEmptyPasswords no
 	UsePAM no 
-"
+'
 
 exit 0
