@@ -17,9 +17,11 @@ Features:
 ## Clone
 ```
 git clone https://github.com/YanarAssaf/one-click-app
-chmod +x apache.sh
-./apache.sh
 ```
+- cd el9 or el7
+- chmod +x apache.sh
+- ./apache.sh
+
 
 ## Contacts
 
