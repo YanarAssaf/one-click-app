@@ -4,7 +4,7 @@
 ## About
 
 Deploy Apps in One-Click throw a SHELL script. <br/>
-Deploy popular applications such as Apache, BIND, Nginx, Nagios on Enterprise Linux with a single click.
+Deploy popular applications on Enterprise Linux el7 & el9 with a single click.
 
 Features:
 - Apache
