@@ -3,7 +3,7 @@
 
 ## About
 
-Deploy Apps in One-Click throw a SHELL script. 
+Deploy Apps in One-Click throw a SHELL script. \n
 Deploy popular applications such as Apache, BIND, Nginx, Nagios on Enterprise Linux with a single click.
 
 Features:
@@ -16,9 +16,9 @@ Features:
 
 ## Clone
 
-- git clone https://github.com/YanarAssaf/one-click-app
-- chmod +x apache.sh
-- ./apache.sh
+`git clone https://github.com/YanarAssaf/one-click-app`
+`chmod +x apache.sh`
+`./apache.sh`
 
 ## Contacts
 
