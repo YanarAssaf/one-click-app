@@ -1,6 +1,6 @@
 #!/bin/bash
 
-EXT_PACK="wget vim net-tools htop mtr rsync bash-completion" 
+EXT_PACK="wget vim net-tools htop mtr nload tcpdump rsync bash-completion" 
 PRE_PACK="yum-utils"
 
 boldblack='\E[1;30;40m'
@@ -20,7 +20,7 @@ cecho() {
 }
 clear
 
-systemctl stop firewalld ; systemctl disable firewalld
+systemctl disable --now firewalld
 setenforce 0
 sed -i --follow-symlinks 's/SELINUX=permissive/SELINUX=disabled/g' /etc/sysconfig/selinux
 
