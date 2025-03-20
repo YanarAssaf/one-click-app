@@ -7,16 +7,12 @@ Deploy Apps in One-Click throw a SHELL script. <br/>
 Deploy popular applications on Enterprise Linux el7 & el9 with a single click.
 
 Features:
-<p> align="left">
-- Apache
-- Nagios
-</p>
-<p> align="right">
-- Docker
-- BIND
-- CSF
-- HAProxy
-</p>
+- Apache      - Docker
+- Nagios      - BIND
+- CSF         - HAProxy
+
+
+
 
 ## Clone
 ```
