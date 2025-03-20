@@ -26,7 +26,7 @@ cecho() {
 }
 clear
 
-systemctl stop firewalld && systemctl disable firewalld
+systemctl disable --now firewalld
 setenforce 0
 sed -i --follow-symlinks 's/SELINUX=permissive/SELINUX=disabled/g' /etc/sysconfig/selinux
 
