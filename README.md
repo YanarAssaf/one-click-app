@@ -7,24 +7,10 @@ Deploy Apps in One-Click throw a SHELL script. <br/>
 Deploy popular applications on Enterprise Linux el7 & el9 with a single click.
 
 Features:
-| OS              | Apache           | Nginx    | BIND   | CSF   | HAProxy   | Prometheus  | Grafana                 
-| :------------------ | :------------------- | :-------------- | :--------------  | :--------------  | :--------------  | :--------------  | :-------------- 
-| EL7        | :white_check_mark:       | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark:
-| EL9        | :white_check_mark:       | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark:
-
-Features:
-| App              | EL7           | EL9                   
-| :------------------ | :------------------- | :-------------- 
-| Apache        | :white_check_mark:       | :white_check_mark:  
-| Docker        | :white_check_mark:       | :x: 
-| Nginx        | :white_check_mark:       | :white_check_mark:  
-| BIND        | :white_check_mark:       | :x: 
-| CSF        | :white_check_mark:       | :x:  
-| HAProxy        | :white_check_mark:       | :x:   
-|  Prometheus | :white_check_mark:       | :white_check_mark: 
-|  Grafana | :white_check_mark:       | :white_check_mark: 
-|  NodeExpoter | :white_check_mark:       | :white_check_mark: 
-|  AlertMgr | :white_check_mark:       | :white_check_mark: 
+| OS              | Apache           | Nginx    | BIND   | CSF   | HAProxy   | Prometheus  | Grafana   |  NodeExpoter |  AlertMgr               
+| :------------------ | :------------------- | :-------------- | :--------------  | :--------------  | :--------------  | :--------------  | :--------------  | :--------------  | :--------------
+| EL7        | :white_check_mark:       | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark:
+| EL9        | :white_check_mark:       | :white_check_mark: | :x: | :x: | :x: | :x: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark:
 
 
 
