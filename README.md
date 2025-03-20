@@ -10,7 +10,7 @@ Features:
 | OS              | Apache           | Nginx    | BIND   | CSF   | HAProxy   | Prometheus  | Grafana   |  NodeExpoter |  AlertMgr               
 | :------------------ | :------------------- | :-------------- | :--------------  | :--------------  | :--------------  | :--------------  | :--------------  | :--------------  | :--------------
 | EL7        | :white_check_mark:       | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark:
-| EL9        | :white_check_mark:       | :white_check_mark: | :x: | :x: | :x: | :x: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark:
+| EL9        | :white_check_mark:       | :white_check_mark: | :x: | :x: | :x: |  :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark:
 
 
 
