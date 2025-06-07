@@ -7,10 +7,11 @@ Deploy Apps in One-Click throw a SHELL script. <br/>
 Deploy popular applications on Enterprise Linux el7 & el9 with a single click.
 
 Features:
-| OS    | Apache | Nginx | BIND   | CSF   | HAProxy | Prometheus  | Grafana |  NodeExpoter |  AlertMgr               
-| :---: | :---:  | :---: | :---:  | :---: | :---:   |    :---:    | :---:   |     :---:    | :---:
-| EL7   | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark:
-| EL9   | :white_check_mark: | :white_check_mark: | :x: | :x: | :x: |  :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark:
+| OS    | Apache | Nginx | BIND   | CSF   | HAProxy | Prometheus  | Grafana |  NodeExpoter |  AlertMgr |  Nexus              
+| :---: | :---:  | :---: | :---:  | :---: | :---:   |    :---:    | :---:   |     :---:    | :---:     | :---:
+| EL7   | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :x:
+| EL9   | :white_check_mark: | :white_check_mark: | :x: | :x: | :x: |  :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :x:
+| U22   | :white_check_mark: | :white_check_mark: | :x: | :x: | :x: |  :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark:  :white_check_mark:
 
 
 
