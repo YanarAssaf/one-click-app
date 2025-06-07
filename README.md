@@ -11,7 +11,7 @@ Features:
 | :---: | :---:  | :---: | :---:  | :---: | :---:   |    :---:    | :---:   |     :---:    | :---:     | :---:
 | EL7   | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :x:
 | EL9   | :white_check_mark: | :white_check_mark: | :x: | :x: | :x: |  :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :x:
-| U22   | :white_check_mark: | :white_check_mark: | :x: | :x: | :x: |  :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark:
+| U22   | :x: | :x: | :x: | :x: | :x: |  :x: | :x: | :x: | :x: | :white_check_mark:
 
 
 
