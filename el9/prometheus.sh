@@ -1,8 +1,9 @@
 #!/bin/bash
 
 ### VARIABLES ###
-PRE_PACK="wget vim htop mtr tar rsync bash-completion" 
-VER=""
+PRE_PACK="tar wget vim net-tools htop mtr nload tcpdump rsync bash-completion" 
+VER="3.11.3"
+#VER=$(curl -sI https://github.com/prometheus/prometheus/releases/latest | grep -i ^location | grep -o v[0-9.]* | sed s/^v//)
 
 # Setup Colours
 boldblack='\E[1;30;40m'
@@ -25,23 +26,25 @@ cecho() {
 }
 clear
 
-systemctl stop firewalld && systemctl disable firewalld
+systemctl disable firewalld --now
 setenforce 0
 sed -i --follow-symlinks 's/SELINUX=permissive/SELINUX=disabled/g' /etc/sysconfig/selinux
 
 useradd --no-create-home --shell /bin/false prometheus
-mkdir /etc/prometheus ; mkdir /var/lib/prometheus
+mkdir -p /etc/prometheus /var/lib/prometheus
+chown prometheus:prometheus /var/lib/prometheus
 
 cecho "Installing Prerequisite Packages..." $boldyellow
 dnf -y -q install epel-release >/dev/null
 dnf -y -q install $PRE_PACK >/dev/null
 
 cecho "Downloading and installing Prometheus..." $boldyellow
-wget https://github.com/prometheus/prometheus/releases/download/v2.40.2/prometheus-2.40.2.linux-amd64.tar.gz >/dev/null
-tar -xvzf prometheus-2.40.2.linux-amd64.tar.gz >/dev/null
+#wget https://github.com/prometheus/prometheus/releases/download/v${VER}/prometheus-${VER}.linux-amd64.tar.gz >/dev/null
+wget https://yanarit.com/prometheus-3.11.3.linux-amd64.tar.gz >/dev/null
+tar xvf prometheus-${VER}.linux-amd64.tar.gz  >/dev/null
+mv prometheus-${VER}.linux-amd64/{prometheus,promtool} /usr/local/bin/ 
+chown prometheus:prometheus /usr/local/bin/{prometheus,promtool}
 
-mv prometheus-2.40.2.linux-amd64/{prometheus,promtool} /usr/local/bin/ 
-mv prometheus-2.40.2.linux-amd64/{consoles,console_libraries} /etc/prometheus
 cecho "Download & install has been completed" $boldgreen
 
 cat <<EOF > /etc/prometheus/prometheus.yml
@@ -54,27 +57,34 @@ scrape_configs:
 EOF
 
 chown -R prometheus:prometheus /etc/prometheus ; chown prometheus:prometheus /var/lib/prometheus 
-chown prometheus:prometheus /usr/local/bin/{prometheus,promtool}
+
 
 cat <<EOF > /etc/systemd/system/prometheus.service
 [Unit]
-Description=Prometheus
+Description=Prometheus 3 Monitoring System
+Documentation=https://prometheus.io/docs/introduction/overview/
 Wants=network-online.target
 After=network-online.target
 [Service]
+Type=simple
 User=prometheus
 Group=prometheus
-Type=simple
+ExecReload=/bin/kill -HUP $MAINPID
 ExecStart=/usr/local/bin/prometheus \
---config.file /etc/prometheus/prometheus.yml \
---storage.tsdb.path /var/lib/prometheus/ \
---web.console.templates=/etc/prometheus/consoles \
---web.console.libraries=/etc/prometheus/console_libraries \
---storage.tsdb.retention.time=100d \
---enable-feature=memory-snapshot-on-shutdown
+  --config.file=/etc/prometheus/prometheus.yml \
+  --storage.tsdb.path=/var/lib/prometheus \
+  --storage.tsdb.retention.time=30d \
+  --web.listen-address=0.0.0.0:9090 \
+  --web.enable-lifecycle \
+  --web.enable-otlp-receiver \
+  --enable-feature=memory-snapshot-on-shutdown
+Restart=always
+RestartSec=5
+SyslogIdentifier=prometheus
+LimitNOFILE=65536
 [Install]
 WantedBy=multi-user.target
 EOF
 
 systemctl daemon-reload
-systemctl enable prometheus.service
+systemctl enable prometheus.service --now
