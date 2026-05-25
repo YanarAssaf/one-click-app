@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ### VARIABLES ###
-PRE_PACK="wget vim net-tools htop mtr nload tcpdump rsync bash-completion" 
+PRE_PACK="tar wget vim net-tools htop mtr nload tcpdump rsync bash-completion" 
 VER="3.11.3"
 #VER=$(curl -sI https://github.com/prometheus/prometheus/releases/latest | grep -i ^location | grep -o v[0-9.]* | sed s/^v//)
 
