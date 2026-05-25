@@ -43,7 +43,6 @@ cecho "Downloading and installing Prometheus..." $boldyellow
 wget https://yanarit.com/prometheus-3.11.3.linux-amd64.tar.gz >/dev/null
 tar xvf prometheus-${VER}.linux-amd64.tar.gz  >/dev/null
 mv prometheus-${VER}.linux-amd64/{prometheus,promtool} /usr/local/bin/ 
-mv prometheus-$VER.linux-amd64/{consoles,console_libraries} /etc/prometheus
 chown prometheus:prometheus /usr/local/bin/{prometheus,promtool}
 
 cecho "Download & install has been completed" $boldgreen
