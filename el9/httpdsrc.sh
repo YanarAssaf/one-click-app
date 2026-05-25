@@ -3,7 +3,7 @@
 ### VARIABLES ###
 EXT_PACK="wget vim net-tools htop mtr nload tcpdump rsync bash-completion" 
 PRE_PACK="autoconf libtool openssl-devel pcre-devel expat-devel"
-VER="2.4.63"
+VER="2.4.67"
 
 # Setup Colours
 boldblack='\E[1;30;40m'
@@ -37,9 +37,9 @@ dnf install -y -q $PRE_PACK >/dev/null
 cd /tmp
 
 cecho "Downloading and installing Httpd..." $boldyellow
-wget -q https://github.com/apache/httpd/archive/$VER.tar.gz ; wget -q https://codeload.github.com/apache/apr/tar.gz/1.7.5 ; wget -q https://github.com/apache/apr-util/archive/1.6.3.tar.gz
-tar xzf $VER.tar.gz ; tar xzf 1.6.3.tar.gz ; tar xzf 1.7.5
-cp -R apr-1.7.5 httpd-$VER/srclib/apr ; cp -R apr-util-1.6.3 httpd-$VER/srclib/apr-util
+wget -q https://github.com/apache/httpd/archive/$VER.tar.gz ; wget -q https://codeload.github.com/apache/apr/tar.gz/1.7.6 ; wget -q https://github.com/apache/apr-util/archive/1.6.3.tar.gz
+tar xzf $VER.tar.gz ; tar xzf 1.6.3.tar.gz ; tar xzf 1.7.6
+cp -R apr-1.7.6 httpd-$VER/srclib/apr ; cp -R apr-util-1.6.3 httpd-$VER/srclib/apr-util
 
 cd /tmp/httpd-$VER
 ./buildconf >/dev/null 2>&1
@@ -77,7 +77,7 @@ printf "<VirtualHost *:80>\nServerName site1\n\n# Directory settings\nDocumentRo
 echo "^_^" >/var/www/site1/index.html
 
 /usr/local/apache2/bin/apachectl configtest
-systemctl enable httpd ; systemctl restart httpd 
+systemctl enable --now httpd
 
 cecho "vhost.conf has been created /etc/httpd/conf.d/vhosts.conf" $boldgreen
 cecho "Website directory /var/www/site1" $boldgreen
