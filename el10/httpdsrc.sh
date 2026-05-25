@@ -2,7 +2,7 @@
 
 ### VARIABLES ###
 EXT_PACK="wget vim net-tools htop mtr nload tcpdump rsync bash-completion" 
-PRE_PACK="autoconf libtool openssl-devel pcre-devel expat-devel"
+PRE_PACK="autoconf libtool openssl-devel pcre2-devel expat-devel"
 VER="2.4.67"
 
 # Setup Colours
