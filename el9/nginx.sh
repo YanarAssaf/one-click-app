@@ -33,6 +33,7 @@ dnf install -y -q $EXT_PACK >/dev/null
 $(printf "[nginx-stable]\nname=nginx stable repo\nbaseurl=http://nginx.org/packages/centos/\$releasever/\$basearch/\ngpgcheck=1\nenabled=1\ngpgkey=https://nginx.org/keys/nginx_signing.key\nmodule_hotfixes=true" >/etc/yum.repos.d/nginx.repo)
 cecho "Installing Nginx..." $boldyellow
 dnf -y install nginx >/dev/null 2>&1
+systemctl enable --now nginx
 cecho "Install has been completed" $boldgreen
 
 exit 0
