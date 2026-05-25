@@ -1,7 +1,8 @@
 #!/bin/bash
 
-EXT_PACK="wget vim net-tools htop mtr nload tcpdump rsync bash-completion" 
-PRE_PACK="yum-utils"
+PRE_PACK="epel-release"
+EXT_PACK="yum-utils wget vim net-tools htop mtr nload tcpdump rsync bash-completion" 
+
 
 boldblack='\E[1;30;40m'
 boldred='\E[1;31;40m'
@@ -25,9 +26,9 @@ setenforce 0
 sed -i --follow-symlinks 's/SELINUX=permissive/SELINUX=disabled/g' /etc/sysconfig/selinux
 
 cecho "Installing Prerequisite Packages..." $boldyellow
-dnf install -y -q epel-release >/dev/null
-dnf install -y -q $EXT_PACK >/dev/null
 dnf install -y -q $PRE_PACK >/dev/null
+dnf install -y -q $EXT_PACK >/dev/null
+
 
 $(printf "[nginx-stable]\nname=nginx stable repo\nbaseurl=http://nginx.org/packages/centos/\$releasever/\$basearch/\ngpgcheck=1\nenabled=1\ngpgkey=https://nginx.org/keys/nginx_signing.key\nmodule_hotfixes=true" >/etc/yum.repos.d/nginx.repo)
 cecho "Installing Nginx..." $boldyellow
