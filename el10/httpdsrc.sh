@@ -77,7 +77,7 @@ printf "<VirtualHost *:80>\nServerName site1\n\n# Directory settings\nDocumentRo
 echo "^_^" >/var/www/site1/index.html
 
 /usr/local/apache2/bin/apachectl configtest
-systemctl enable httpd ; systemctl restart httpd 
+systemctl enable --now httpd
 
 cecho "vhost.conf has been created /etc/httpd/conf.d/vhosts.conf" $boldgreen
 cecho "Website directory /var/www/site1" $boldgreen
