@@ -66,8 +66,6 @@ scrape_configs:
           instance_name: "prometheus-server"
 EOF
 
-chown -R prometheus:prometheus /etc/prometheus ; chown prometheus:prometheus /var/lib/prometheus 
-
 cat <<EOF > /etc/prometheus/rules.yml
 groups:
   - name: node_alerts
@@ -136,5 +134,6 @@ LimitNOFILE=65536
 WantedBy=multi-user.target
 EOF
 
+chown -R prometheus:prometheus /etc/prometheus ; chown prometheus:prometheus /var/lib/prometheus 
 systemctl daemon-reload
 systemctl enable prometheus.service --now
