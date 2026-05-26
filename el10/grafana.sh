@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ### VARIABLES ###
-PRE_PACK="" 
+PRE_PACK="tar wget vim net-tools htop mtr nload tcpdump rsync bash-completion" 
 VER=""
 
 # Setup Colours
@@ -24,6 +24,10 @@ cecho() {
     return
 }
 clear
+
+dnf install -y -q epel-release >/dev/null
+dnf install -y -q $EXT_PACK >/dev/null
+dnf install -y -q $PRE_PACK >/dev/null
 
 cat <<EOF > /etc/yum.repos.d/grafana.repo
 [grafana]
