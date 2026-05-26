@@ -27,7 +27,7 @@ git clone https://github.com/YanarAssaf/one-click-app
 
 ## Contacts
 
-If you discover a security vulnerability within App, please send an e-mail to Yanar Assaf via [yanar@outlook.com](mailto:yanar@outlook.com).
+If you discover a security vulnerability within App, please send an e-mail to Yanar Assaf via [yanar@yanarit.com](mailto:yanar@yanarit.com).
 <p class="love">Made with :heart: By Yanar</p>
 
 ## License
