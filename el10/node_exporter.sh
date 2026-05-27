@@ -28,7 +28,7 @@ clear
 
 systemctl disable firewalld --now
 setenforce 0
-sed -i --follow-symlinks 's/SELINUX=permissive/SELINUX=disabled/g' /etc/sysconfig/selinux
+sed -i --follow-symlinks 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
 
 cecho "Installing Prerequisite Packages..." $boldyellow
 dnf -y -q install $PRE_PACK >/dev/null
