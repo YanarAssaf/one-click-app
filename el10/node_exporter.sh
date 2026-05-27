@@ -1,7 +1,8 @@
 #!/bin/bash
 
 ### VARIABLES ###
-PRE_PACK="tar wget vim net-tools htop mtr nload tcpdump rsync bash-completion" 
+PRE_PACK="epel-release"
+EXT_PACK="tar wget vim net-tools htop mtr nload tcpdump rsync bash-completion" 
 VER="1.11.1"
 
 # Setup Colours
@@ -30,8 +31,8 @@ setenforce 0
 sed -i --follow-symlinks 's/SELINUX=permissive/SELINUX=disabled/g' /etc/sysconfig/selinux
 
 cecho "Installing Prerequisite Packages..." $boldyellow
-dnf -y -q install epel-release >/dev/null
 dnf -y -q install $PRE_PACK >/dev/null
+dnf -y -q install $EXT_PACK >/dev/null
 
 cecho "Downloading and instaling node_exporter..." $boldyellow
 
@@ -69,4 +70,4 @@ WantedBy=multi-user.target
 EOF
 
 systemctl daemon-reload
-systemctl enable node_exporter.service --now
+systemctl enable --now node_exporter.service 
