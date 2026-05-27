@@ -67,7 +67,7 @@ scrape_configs:
           instance_name: "prometheus-server"
 EOF
 
-cat <<EOF > /etc/prometheus/rules.yml
+cat << 'EOF' > /etc/prometheus/rules.yml
 groups:
   - name: node_alerts
     rules:
