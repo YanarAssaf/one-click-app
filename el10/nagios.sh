@@ -32,7 +32,7 @@ clear
 
 systemctl disable --now firewalld
 setenforce 0
-sed -i --follow-symlinks 's/SELINUX=permissive/SELINUX=disabled/g' /etc/sysconfig/selinux
+sed -i --follow-symlinks 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
 
 cecho "Installing Prerequisite Packages..." $boldyellow
 dnf install -y -q epel-release >/dev/null
