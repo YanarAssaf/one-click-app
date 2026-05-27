@@ -2,7 +2,7 @@
 
 ### VARIABLES ###
 PRE_PACK="gcc glibc glibc-common perl httpd php wget gd gd-devel s-nail postfix openssl-devel"
-PRE_PACK1="make gettext automake autoconf  net-snmp net-snmp-utils perl-Net-SNMP"
+PRE_PACK1="make gettext automake autoconf  net-snmp net-snmp-utils perl-Net-SNMP nrpe nagios-plugins-nrpe"
 EXT_PACK="tar wget vim net-tools htop mtr nload tcpdump rsync bash-completion" 
 
 VER="4.5.12"
