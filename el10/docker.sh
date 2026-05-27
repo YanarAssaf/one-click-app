@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ### VARIABLES ###
-PRE_PACK="dnf-plugins-core"
+PRE_PACK="epel-release dnf-plugins-core"
 EXT_PACK="tar wget vim net-tools htop mtr nload tcpdump rsync bash-completion" 
 VER=""
 
@@ -27,9 +27,8 @@ cecho() {
 clear
 
 cecho "Installing Prerequisite Packages..." $boldyellow
-dnf install -y -q epel-release >/dev/null
-dnf install -y -q $EXT_PACK >/dev/null
 dnf install -y -q $PRE_PACK >/dev/null
+dnf install -y -q $EXT_PACK >/dev/null
 cd /tmp
 
 cecho "Downloading and installing Docker..." $boldyellow
