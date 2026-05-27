@@ -1,7 +1,8 @@
 #!/bin/bash
 
 ### VARIABLES ###
-PRE_PACK="tar wget vim net-tools htop mtr nload tcpdump rsync bash-completion" 
+PRE_PACK="epel-release"
+EXT_PACK="tar wget vim net-tools htop mtr nload tcpdump rsync bash-completion" 
 VER="3.11.3"
 #VER=$(curl -sI https://github.com/prometheus/prometheus/releases/latest | grep -i ^location | grep -o v[0-9.]* | sed s/^v//)
 
@@ -28,15 +29,15 @@ clear
 
 systemctl disable firewalld --now
 setenforce 0
-sed -i --follow-symlinks 's/SELINUX=permissive/SELINUX=disabled/g' /etc/sysconfig/selinux
+sed -i --follow-symlinks 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
 
 useradd --no-create-home --shell /bin/false prometheus
 mkdir -p /etc/prometheus /var/lib/prometheus
 chown prometheus:prometheus /var/lib/prometheus
 
 cecho "Installing Prerequisite Packages..." $boldyellow
-dnf -y -q install epel-release >/dev/null
 dnf -y -q install $PRE_PACK >/dev/null
+dnf -y -q install $EXT_PACK >/dev/null
 
 cecho "Downloading and installing Prometheus..." $boldyellow
 #wget https://github.com/prometheus/prometheus/releases/download/v${VER}/prometheus-${VER}.linux-amd64.tar.gz >/dev/null
@@ -50,14 +51,62 @@ cecho "Download & install has been completed" $boldgreen
 cat <<EOF > /etc/prometheus/prometheus.yml
 global:
   scrape_interval: 60s
+
+rule_files:
+  - rules.yml
+
 scrape_configs:
   - job_name: 'node'
     static_configs:
       - targets: ['localhost:9090']
+
+  - job_name: "node_exporter"
+    static_configs:
+      - targets: ["localhost:9100"]
+        labels:
+          instance_name: "prometheus-server"
 EOF
 
-chown -R prometheus:prometheus /etc/prometheus ; chown prometheus:prometheus /var/lib/prometheus 
+cat << 'EOF' > /etc/prometheus/rules.yml
+groups:
+  - name: node_alerts
+    rules:
+      - alert: InstanceDown
+        expr: up == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Instance {{ $labels.instance }} is down"
+          description: "{{ $labels.job }} target {{ $labels.instance }} has been unreachable for more than 2 minutes."
 
+      - alert: HighCPUUsage
+        expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU usage on {{ $labels.instance }}"
+          description: "CPU usage has been above 85% for 5 minutes. Current value: {{ $value | printf \"%.1f\" }}%"
+
+      - alert: HighMemoryUsage
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 90
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage on {{ $labels.instance }}"
+          description: "Memory usage has been above 90% for 5 minutes. Current value: {{ $value | printf \"%.1f\" }}%"
+
+      - alert: DiskSpaceLow
+        expr: (1 - (node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"})) * 100 > 85
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Disk space low on {{ $labels.instance }}"
+          description: "Root filesystem usage is above 85%. Current value: {{ $value | printf \"%.1f\" }}%"
+EOF
 
 cat <<EOF > /etc/systemd/system/prometheus.service
 [Unit]
@@ -86,5 +135,6 @@ LimitNOFILE=65536
 WantedBy=multi-user.target
 EOF
 
+chown -R prometheus:prometheus /etc/prometheus ; chown prometheus:prometheus /var/lib/prometheus 
 systemctl daemon-reload
-systemctl enable prometheus.service --now
+systemctl enable --now prometheus.service 
