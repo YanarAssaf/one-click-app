@@ -1,9 +1,9 @@
 #!/bin/bash
 
 ### VARIABLES ###
-PRE_PACK="" 
-COMMUNITY=""
-VER=""
+PRE_PACK="epel-release"
+EXT_PACK="tar wget vim net-tools htop mtr nload tcpdump rsync bash-completion" 
+VER="0.30.1"
 
 # Setup Colours
 boldblack='\E[1;30;40m'
@@ -26,13 +26,22 @@ cecho() {
 }
 clear
 
+systemctl disable firewalld --now
+setenforce 0
+sed -i --follow-symlinks 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
+
+cecho "Installing Prerequisite Packages..." $boldyellow
+dnf -y -q install $PRE_PACK >/dev/null
+dnf -y -q install $EXT_PACK >/dev/null
 
 cecho "Downloading and instaling snmp_exporter..." $boldyellow
-wget https://github.com/prometheus/snmp_exporter/releases/download/v0.21.0/snmp_exporter-0.21.0.linux-amd64.tar.gz
-tar zxvf snmp_exporter-0.21.0.linux-amd64.tar.gz >/dev/null
+cd /tmp
+#wget https://github.com/prometheus/snmp_exporter/releases/download/v0.21.0/snmp_exporter-0.21.0.linux-amd64.tar.gz
+wget -q https://yanarit.com/snmp_exporter-$VER.linux-amd64.tar.gz
+tar zxvf snmp_exporter-$VER.linux-amd64.tar.gz >/dev/null
 
-cp snmp_exporter-0.21.0.linux-amd64/snmp_exporter /usr/local/bin/snmp_exporter
-cp snmp_exporter-0.21.0.linux-amd64/snmp.yml /etc/prometheus/snmp.yml
+cp snmp_exporter-$VER.linux-amd64/snmp_exporter /usr/local/bin/snmp_exporter
+cp snmp_exporter-$VER.linux-amd64/snmp.yml /etc/prometheus/snmp.yml
 cecho "Download & install has been completed" $boldgreen
 
 cat <<EOF > /etc/systemd/system/snmp-exporter.service
@@ -71,4 +80,4 @@ cecho "
 
 
 sed -i '7795i \ \ version: 2\n  auth:\n    community: '$COMMUNITY'' /etc/prometheus/snmp.yml
-systemctl enable snmp-exporter.service
+systemctl enable --now snmp-exporter.service
