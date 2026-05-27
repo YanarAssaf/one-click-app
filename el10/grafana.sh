@@ -1,13 +1,9 @@
 #!/bin/bash
 
 ### VARIABLES ###
-PRE_PACK="gcc glibc glibc-common perl httpd php wget gd gd-devel s-nail postfix openssl-devel"
+PRE_PACK=""
 EXT_PACK="tar wget vim net-tools htop mtr nload tcpdump rsync bash-completion" 
-
 VER="4.5.12"
-USER_FILE="/usr/local/nagios/etc/htpasswd.users"
-USER_NAME="nagiosadmin"
-USER_PASS="admin"
 
 # Setup Colours
 boldblack='\E[1;30;40m'
