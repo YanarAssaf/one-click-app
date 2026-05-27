@@ -87,4 +87,13 @@ else
     exit 1
 fi
 
+cecho "commnad to install nrpe on clients" $boldgreen
+
+echo ""
+
+cecho "
+  dnf config-manager --set-enabled crb
+  dnf install nrpe nagios-plugins-all " $boldgreen
+
+
 cecho "finished" $boldgreen
