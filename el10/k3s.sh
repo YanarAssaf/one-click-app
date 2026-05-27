@@ -26,98 +26,118 @@ cecho() {
 }
 clear
 
-# Interactive User Menu
-cecho "========================================" $boldcyan
-cecho "      K3s Installation Setup" $boldcyan
-cecho "========================================" $boldcyan
-cecho "1) Install Highly Available (HA) Initial Cluster Master" $boldwhite
-cecho "2) Install Standalone Single Master" $boldwhite
-cecho "3) Join Existing HA Cluster as an Additional Master" $boldwhite
-cecho "4) Join Existing Cluster as Worker Agent" $boldwhite
-cecho "========================================" $boldcyan
-read -p "Enter your choice [1, 2, 3, or 4]: " CHOICE
 
-# Validate setup mode input
-if [[ "$CHOICE" != "1" && "$CHOICE" != "2" && "$CHOICE" != "3" && "$CHOICE" != "4" ]]; then
-    cecho "Invalid option. Exiting script." $boldred
-    exit 1
+# ==========================================
+# CRITICAL HOSTNAME & HOSTS WARNING
+# ==========================================
+cecho "==========================================================" $boldred
+cecho "               CRITICAL REQUIREMENT WARNING               " $boldred
+cecho "==========================================================" $boldred
+cecho "Before deploying K3s, you MUST ensure:" $boldwhite
+cecho "1. Each node has a unique, permanent system hostname." $boldyellow
+cecho "   Example: hostnamectl set-hostname master-01" $boldcyan
+cecho "2. Your /etc/hosts file maps all node IPs to their hostnames." $boldyellow
+cecho "   Example entries:" $boldcyan
+echo "   10.10.0.35  master-01"
+echo "   10.10.0.36  master-02"
+echo "   10.10.0.37  worker-01"
+cecho "==========================================================" $boldred
+echo ""
+read -p "Have you configured your hostnames and /etc/hosts file? (y/n): " CONFIRM
+
+if [[ ! "$CONFIRM" =~ ^[Yy]$ ]]; then
+    cecho "\nPlease configure your node network settings first. Exiting script." $boldyellow
+    exit 0
 fi
 
-echo ""
-cecho "========================================" $boldcyan
-cecho "      K3s Cluster Token Setup" $boldcyan
-cecho "========================================" $boldcyan
+clear
 
-# Options 3 and 4 require entering the exact pre-existing cluster token
-if [[ "$CHOICE" == "3" || "$CHOICE" == "4" ]]; then
-    read -p "Enter your existing K3s Cluster Token: " USER_TOKEN
-    while [ -z "$USER_TOKEN" ]; do
-        cecho "Token cannot be blank for joining a cluster!" $boldred
-        read -p "Enter your existing K3s Cluster Token: " USER_TOKEN
-    done
-else
-    # Options 1 and 2 allow auto-generation if left blank
-    read -p "Enter custom K3s Token (Leave blank to auto-generate): " USER_TOKEN
-    if [ -z "$USER_TOKEN" ]; then
-        USER_TOKEN=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 32)
-        cecho "Generated Auto Token: $USER_TOKEN" $boldmagenta
-        cecho "--> SAVE THIS TOKEN! You need it to join other nodes." $boldmagenta
-    fi
-fi
+systemctl disable firewalld --now
+setenforce 0
+sed -i --follow-symlinks 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
+swapoff -a
+sudo sed -i '/swap/s/^/#/' /etc/fstab
 
-# IP Configuration Variable Setup
-echo ""
-cecho "========================================" $boldcyan
-cecho "      IP Address Configuration" $boldcyan
-cecho "========================================" $boldcyan
-
-# Options 3 and 4 prompt for the target remote master IP
-if [[ "$CHOICE" == "3" || "$CHOICE" == "4" ]]; then
-    read -p "Enter Target Master Server IP (e.g., 172.20.20.61): " NODE_IP
-    while [ -z "$NODE_IP" ]; do
-        cecho "Master Server IP cannot be blank!" $boldred
-        read -p "Enter Target Master Server IP: " NODE_IP
-    done
-else
-    # Automatically grab this server's primary local IP address for Master initial setups
-    NODE_IP=$(hostname -I | awk '{print $1}')
-    cecho "Detected local Master IP: $NODE_IP" $boldgreen
-fi
-
-echo ""
 cecho "Installing Prerequisite Packages..." $boldyellow
 dnf -y -q install $PRE_PACK >/dev/null
 dnf -y -q install $EXT_PACK >/dev/null
 
-cecho "Configure K3s Service..." $boldyellow
-
-if [ "$CHOICE" == "1" ]; then
-    cecho "Starting High Availability (HA) Initial Installation..." $boldgreen
-    curl -sfL https://get.k3s.io | K3S_TOKEN="$USER_TOKEN" sh -s - server \
-        --cluster-init \
-        --disable traefik \
-        --node-taint 'node-role.kubernetes.io/control-plane:NoSchedule'
-elif [ "$CHOICE" == "2" ]; then
-    cecho "Starting Standalone Single Master Installation..." $boldgreen
-    curl -sfL https://get.k3s.io | K3S_TOKEN="$USER_TOKEN" sh -s - server \
-        --disable traefik
-elif [ "$CHOICE" == "3" ]; then
-    cecho "Joining Cluster as an Additional HA Master Node..." $boldgreen
-    curl -sfL https://get.k3s.io | K3S_TOKEN="$USER_TOKEN" sh -s - server \
-        --server "https://${NODE_IP}:6443" \
-        --node-taint 'node-role.kubernetes.io/control-plane:NoSchedule'
-else
-    cecho "Joining Cluster as Worker Agent..." $boldgreen
-    curl -sfL https://get.k3s.io | K3S_TOKEN="$USER_TOKEN" sh -s - agent \
-        --server "https://${NODE_IP}:6443"
-fi
+# ==========================================
+# DISPLAY MENU
+# ==========================================
 
 echo ""
-cecho "========================================" $boldgreen
-cecho " K3s installation command executed!" $boldgreen
-cecho " Use Token: $USER_TOKEN" $boldyellow
-cecho " Target IP used: $NODE_IP" $boldyellow
-cecho "========================================" $boldgreen
+cecho "=========================================" $boldcyan
+cecho "       K3S INSTALLATION MENU            " $boldcyan
+cecho "=========================================" $boldcyan
+cecho "1) Install Highly Available (HA) Initial Cluster Master" $boldwhite
+cecho "2) Install Standalone Single Master" $boldwhite
+cecho "3) Join Existing HA Cluster as an Additional Master" $boldwhite
+cecho "4) Join Existing Cluster as Worker Agent" $boldwhite
+echo ""
+read -p "Please select an option [1-4]: " OPTION
 
+# Validate option before asking for inputs
+if [[ ! "$OPTION" =~ ^[1-4]$ ]]; then
+    cecho "\nInvalid option selected! Exiting script." $boldred
+    exit 1
+fi
 
-cecho "Download & install has been completed" $boldgreen
+# ==========================================
+# COLLECT USER INPUTS (OPTIMIZED & CENTRALIZED)
+# ==========================================
+echo ""
+cecho "--- Configuration Inputs ---" $boldblue
+read -p "Enter Secret Token to use: " YOUR_SECRET
+
+# If option is 3 or 4, we also need the existing Master IP
+if [ "$OPTION" -eq 3 ] || [ "$OPTION" -eq 4 ]; then
+    read -p "Enter Existing Master IP Address: " MASTER_IP
+fi
+
+# ==========================================
+# K3S INSTALLATION LOGIC
+# ==========================================
+
+case $OPTION in
+    1)
+        cecho "\nStarting K3s HA installation..." $boldgreen
+        curl -sfL https://get.k3s.io | K3S_TOKEN=$YOUR_SECRET sh -s - server --cluster-init --node-taint 'node-role.kubernetes.io/control-plane:NoSchedule'
+        ;;
+    2)
+        cecho "\nStarting K3s Standalone installation..." $boldgreen
+        curl -sfL https://get.k3s.io | K3S_TOKEN=$YOUR_SECRET sh -
+        ;;
+    3)
+        cecho "\nJoining as an additional Master..." $boldgreen
+        curl -sfL https://get.k3s.io | K3S_TOKEN=$YOUR_SECRET sh -s - server --server https://$MASTER_IP:6443 --node-taint 'node-role.kubernetes.io/control-plane:NoSchedule'
+        ;;
+    4)
+        cecho "\nJoining as a Worker Agent..." $boldgreen
+		curl -sfL https://get.k3s.io | K3S_TOKEN=$YOUR_SECRET sh -s - agent --server https://$MASTER_IP:6443
+        ;;
+esac
+
+# ==========================================
+# POST-INSTALL CONFIGURATION
+# ==========================================
+
+# Configure kubectl bash auto-completion if kubectl exists or is installed
+if command -v kubectl &> /dev/null; then
+    cecho "\nConfiguring kubectl bash completion and shortcuts..." $boldyellow
+    
+    if ! grep -q "bash_completion" ~/.bashrc; then
+        echo '[[ -r /usr/share/bash-completion/bash_completion ]] && . /usr/share/bash-completion/bash_completion' >> ~/.bashrc
+        echo 'source <(kubectl completion bash)' >> ~/.bashrc
+        echo 'alias k=kubectl' >> ~/.bashrc
+        echo 'complete -o default -F __start_kubectl k' >> ~/.bashrc
+    fi
+    
+    cecho "Autocompletion configuration complete! Reloading session..." $boldgreen
+fi
+
+# AUTOMATICALLY RELOAD TERMINAL FOR USER
+exec bash
+
+#/usr/local/bin/k3s-uninstall.sh
+#/usr/local/bin/k3s-agent-uninstall.sh
