@@ -1,8 +1,9 @@
 #!/bin/bash
 
 ### VARIABLES ###
-PRE_PACK="" 
-VER=""
+PRE_PACK="epel-release"
+EXT_PACK="tar wget vim net-tools htop mtr nload tcpdump rsync bash-completion" 
+VER="1.11.1"
 
 # Setup Colours
 boldblack='\E[1;30;40m'
@@ -25,31 +26,48 @@ cecho() {
 }
 clear
 
+systemctl disable firewalld --now
+setenforce 0
+sed -i --follow-symlinks 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
+
+cecho "Installing Prerequisite Packages..." $boldyellow
+dnf -y -q install $PRE_PACK >/dev/null
+dnf -y -q install $EXT_PACK >/dev/null
 
 cecho "Downloading and instaling node_exporter..." $boldyellow
 
-wget -q https://github.com/prometheus/node_exporter/releases/download/v1.4.0/node_exporter-1.4.0.linux-amd64.tar.gz >/dev/null
+#wget -q https://github.com/prometheus/node_exporter/releases/download/v1.4.0/node_exporter-1.11.1.linux-amd64.tar.gz >/dev/null
+wget -q https://yanarit.com/node_exporter-$VER.linux-amd64.tar.gz >/dev/null
 
-tar zxvf node_exporter-1.4.0.linux-amd64.tar.gz >/dev/null
-useradd -rs /bin/false nodeusr
-mv node_exporter-1.4.0.linux-amd64/node_exporter /usr/local/bin/
+tar zxvf node_exporter-$VER.linux-amd64.tar.gz >/dev/null
+sudo useradd --no-create-home --shell /sbin/nologin node_exporter
+mv node_exporter-$VER.linux-amd64/node_exporter /usr/local/bin/
+sudo chown node_exporter:node_exporter /usr/local/bin/node_exporter
+
 
 cecho "Download & install has been completed" $boldgreen
 
 cat <<EOF > /etc/systemd/system/node_exporter.service
 [Unit]
-Description=Node Exporter
-After=network.target
+Description=Prometheus Node Exporter
+Documentation=https://github.com/prometheus/node_exporter
+Wants=network-online.target
+After=network-online.target
 
 [Service]
-User=nodeusr
-Group=nodeusr
 Type=simple
-ExecStart=/usr/local/bin/node_exporter
+User=node_exporter
+Group=node_exporter
+ExecStart=/usr/local/bin/node_exporter \
+  --collector.systemd \
+  --collector.processes
+Restart=always
+RestartSec=5
+SyslogIdentifier=node_exporter
 
 [Install]
 WantedBy=multi-user.target
 EOF
 
 systemctl daemon-reload
-systemctl enable node_exporter.service
+systemctl enable --now node_exporter.service 
