@@ -46,4 +46,4 @@ cecho "Downloading and instaling Grafana..." $boldyellow
 dnf -y -q install grafana >/dev/null
 systemctl enable grafana-server --now
 cecho "Download & install has been completed" $boldgreen
-#cecho "sum by (alertname) (ALERTS)" 
+#cecho "sum by (alertname) (ALERTS) or dashboardID 18458" 
