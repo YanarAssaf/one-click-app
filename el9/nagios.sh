@@ -47,7 +47,7 @@ cd /tmp
 #wget --output-document="nagioscore.tar.gz" $(wget -q -O - https://api.github.com/repos/NagiosEnterprises/nagioscore/releases/latest  | grep '"browser_download_url":' | grep -o 'https://[^"]*')
 wget -q -O nagioscore.tar.gz https://yanarit.com//nagios-4.5.12.tar.gz
 tar xzf nagioscore.tar.gz
-cd /tmp/nagios-*
+cd /tmp/nagios-$VER
 
 
 ./configure >/dev/null 2>&1
