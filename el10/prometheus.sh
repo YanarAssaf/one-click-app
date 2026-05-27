@@ -29,7 +29,7 @@ clear
 
 systemctl disable firewalld --now
 setenforce 0
-sed -i --follow-symlinks 's/SELINUX=permissive/SELINUX=disabled/g' /etc/sysconfig/selinux
+sed -i --follow-symlinks 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
 
 useradd --no-create-home --shell /bin/false prometheus
 mkdir -p /etc/prometheus /var/lib/prometheus
