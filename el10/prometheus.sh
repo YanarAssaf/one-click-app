@@ -1,7 +1,8 @@
 #!/bin/bash
 
 ### VARIABLES ###
-PRE_PACK="tar wget vim net-tools htop mtr nload tcpdump rsync bash-completion" 
+PRE_PACK="epel-release"
+EXT_PACK="tar wget vim net-tools htop mtr nload tcpdump rsync bash-completion" 
 VER="3.11.3"
 #VER=$(curl -sI https://github.com/prometheus/prometheus/releases/latest | grep -i ^location | grep -o v[0-9.]* | sed s/^v//)
 
@@ -35,8 +36,8 @@ mkdir -p /etc/prometheus /var/lib/prometheus
 chown prometheus:prometheus /var/lib/prometheus
 
 cecho "Installing Prerequisite Packages..." $boldyellow
-dnf -y -q install epel-release >/dev/null
 dnf -y -q install $PRE_PACK >/dev/null
+dnf -y -q install $EXT_PACK >/dev/null
 
 cecho "Downloading and installing Prometheus..." $boldyellow
 #wget https://github.com/prometheus/prometheus/releases/download/v${VER}/prometheus-${VER}.linux-amd64.tar.gz >/dev/null
@@ -136,4 +137,4 @@ EOF
 
 chown -R prometheus:prometheus /etc/prometheus ; chown prometheus:prometheus /var/lib/prometheus 
 systemctl daemon-reload
-systemctl enable prometheus.service --now
+systemctl enable --now prometheus.service 
