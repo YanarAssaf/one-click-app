@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PRE_PACK="epel-release"
-EXT_PACK="yum-utils wget vim net-tools htop mtr nload tcpdump rsync bash-completion" 
+EXT_PACK="yum-utils tar wget vim net-tools htop mtr nload tcpdump rsync bash-completion" 
 
 
 boldblack='\E[1;30;40m'
@@ -23,7 +23,7 @@ clear
 
 systemctl disable --now firewalld
 setenforce 0
-sed -i --follow-symlinks 's/SELINUX=permissive/SELINUX=disabled/g' /etc/sysconfig/selinux
+sed -i --follow-symlinks 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
 
 cecho "Installing Prerequisite Packages..." $boldyellow
 dnf install -y -q $PRE_PACK >/dev/null
