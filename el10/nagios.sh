@@ -67,8 +67,8 @@ cecho "Download & install has been completed" $boldgreen
 
 htpasswd -cb "$USER_FILE" "$USER_NAME" "$USER_PASS"
 
-systemctl enable httpd.service --now
-systemctl enable nagios.service --now
+systemctl --now enable httpd.service 
+systemctl --now enable nagios.service
 
 
 cecho "finished" $boldgreen
