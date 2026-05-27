@@ -91,7 +91,7 @@ cecho "commnad to install nrpe on clients" $boldgreen
 
 echo ""
 
-cecho "alerting:
+cecho "
   dnf config-manager --set-enabled crb
   dnf install nrpe nagios-plugins-all " $boldgreen
 
