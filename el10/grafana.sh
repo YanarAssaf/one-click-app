@@ -1,9 +1,9 @@
 #!/bin/bash
 
 ### VARIABLES ###
-PRE_PACK=""
-EXT_PACK="tar wget vim net-tools htop mtr nload tcpdump rsync bash-completion" 
-VER="4.5.12"
+PRE_PACK="tar wget vim net-tools htop mtr nload tcpdump rsync bash-completion"
+EXT_PACK="" 
+VER=""
 
 # Setup Colours
 boldblack='\E[1;30;40m'
