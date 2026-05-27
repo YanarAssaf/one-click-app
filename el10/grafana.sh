@@ -28,7 +28,7 @@ clear
 
 cecho "Installing Prerequisite Packages..." $boldyellow
 dnf install -y -q epel-release >/dev/null
-dnf install -y -q $EXT_PACK >/dev/null
+#dnf install -y -q $EXT_PACK >/dev/null
 dnf install -y -q $PRE_PACK >/dev/null
 
 cat <<EOF > /etc/yum.repos.d/grafana.repo
