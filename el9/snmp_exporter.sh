@@ -49,15 +49,10 @@ ExecStart=/usr/local/bin/snmp_exporter --config.file=/etc/prometheus/snmp.yml
 WantedBy=multi-user.target
 EOF
 
-cat <<EOF > /etc/prometheus/prometheus.yml
-global:
-  scrape_interval: 60s
+cecho "Add snmp job to your prometheus conf file" $boldgreen
+echo ""
 
-scrape_configs:
-  - job_name: 'node'
-    static_configs:
-      - targets: ['prometheus:9100']
-
+cecho "
   - job_name: 'snmp'
     scrape_timeout: 1m
     static_configs:
@@ -72,8 +67,8 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 127.0.0.1:9116
-EOF
+        replacement: 127.0.0.1:9116 " $boldgreen
+
 
 sed -i '7795i \ \ version: 2\n  auth:\n    community: '$COMMUNITY'' /etc/prometheus/snmp.yml
 systemctl enable snmp-exporter.service
