@@ -1,8 +1,8 @@
 #!/bin/bash
 
 ### VARIABLES ###
-PRE_PACK="tar wget vim net-tools htop mtr nload tcpdump rsync bash-completion"
-EXT_PACK="" 
+PRE_PACK="epel-release"
+EXT_PACK="tar wget vim net-tools htop mtr nload tcpdump rsync bash-completion" 
 VER=""
 
 # Setup Colours
@@ -27,9 +27,8 @@ cecho() {
 clear
 
 cecho "Installing Prerequisite Packages..." $boldyellow
-dnf install -y -q epel-release >/dev/null
-#dnf install -y -q $EXT_PACK >/dev/null
 dnf install -y -q $PRE_PACK >/dev/null
+dnf install -y -q $EXT_PACK >/dev/null
 
 cat <<EOF > /etc/yum.repos.d/grafana.repo
 [grafana]
@@ -44,7 +43,7 @@ sslcacert=/etc/pki/tls/certs/ca-bundle.crt
 EOF
 
 cecho "Downloading and instaling Grafana..." $boldyellow
-#dnf -y -q install $PRE_PACK >/dev/null
 dnf -y -q install grafana >/dev/null
 systemctl enable grafana-server --now
+
 cecho "Download & install has been completed" $boldgreen
