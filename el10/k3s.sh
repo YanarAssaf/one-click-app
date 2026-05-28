@@ -90,8 +90,27 @@ echo ""
 cecho "--- Configuration Inputs ---" $boldblue
 read -p "Enter Secret Token to use: " YOUR_SECRET
 
-# If option is 3 or 4, we also need the existing Master IP
-if [ "$OPTION" -eq 3 ] || [ "$OPTION" -eq 4 ]; then
+# Additional inputs for Option 1
+if [ "$OPTION" -eq 1 ]; then
+    read -p "Deploy with an external load balancer? (y/n): " USE_LB
+    if [[ "$USE_LB" =~ ^[Yy]$ ]]; then
+        read -p "Enter TLS SAN IP / Load Balancer IP: " TLS_IP
+    fi
+fi
+
+# Additional inputs for Option 3
+if [ "$OPTION" -eq 3 ]; then
+    read -p "Deploy with an external load balancer? (y/n): " USE_LB
+    if [[ "$USE_LB" =~ ^[Yy]$ ]]; then
+        read -p "Enter TLS SAN IP / Load Balancer IP: " TLS_IP
+    fi
+    if [[ ! "$USE_LB" =~ ^[Yy]$ ]]; then
+        read -p "Enter Existing Master IP Address: " MASTER_IP
+    fi
+fi
+
+# Additional inputs for Option 4
+if [ "$OPTION" -eq 4 ]; then
     read -p "Enter Existing Master IP Address: " MASTER_IP
 fi
 
@@ -101,16 +120,26 @@ fi
 
 case $OPTION in
     1)
-        cecho "\nStarting K3s HA installation..." $boldgreen
-        curl -sfL https://get.k3s.io | K3S_TOKEN=$YOUR_SECRET sh -s - server --cluster-init --node-taint 'node-role.kubernetes.io/control-plane:NoSchedule'
+        if [[ "$USE_LB" =~ ^[Yy]$ ]]; then
+            cecho "\nStarting K3s HA installation with External Load Balancer ($TLS_IP)..." $boldgreen
+            curl -sfL https://get.k3s.io | K3S_TOKEN=$YOUR_SECRET sh -s - server --cluster-init --tls-san=$TLS_IP --node-taint 'node-role.kubernetes.io/control-plane:NoSchedule'
+        else
+            cecho "\nStarting K3s HA installation..." $boldgreen
+            curl -sfL https://get.k3s.io | K3S_TOKEN=$YOUR_SECRET sh -s - server --cluster-init --node-taint 'node-role.kubernetes.io/control-plane:NoSchedule'
+        fi
         ;;
     2)
         cecho "\nStarting K3s Standalone installation..." $boldgreen
         curl -sfL https://get.k3s.io | K3S_TOKEN=$YOUR_SECRET sh -
         ;;
     3)
-        cecho "\nJoining as an additional Master..." $boldgreen
-        curl -sfL https://get.k3s.io | K3S_TOKEN=$YOUR_SECRET sh -s - server --server https://$MASTER_IP:6443 --node-taint 'node-role.kubernetes.io/control-plane:NoSchedule'
+        if [[ "$USE_LB" =~ ^[Yy]$ ]]; then
+            cecho "\nJoining as an additional Master with External Load Balancer ($TLS_IP)..." $boldgreen
+            curl -sfL https://get.k3s.io | K3S_TOKEN=$YOUR_SECRET sh -s - server --server https://$TLS_IP:6443 --tls-san=$TLS_IP --node-taint 'node-role.kubernetes.io/control-plane:NoSchedule'
+        else
+            cecho "\nJoining as an additional Master..." $boldgreen
+            curl -sfL https://get.k3s.io | K3S_TOKEN=$YOUR_SECRET sh -s - server --server https://$MASTER_IP:6443 --node-taint 'node-role.kubernetes.io/control-plane:NoSchedule'
+        fi
         ;;
     4)
         cecho "\nJoining as a Worker Agent..." $boldgreen
