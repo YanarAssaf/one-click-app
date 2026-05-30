@@ -107,7 +107,7 @@ if [[ "$user_input" == "yes" || "$user_input" == "y" ]]; then
     dnf install -y -q python3-pip s-nail python3-packaging >/dev/null
 	pip3 install pywbem >/dev/null
 	cd /usr/local/nagios/libexec/
-	wget -q https://www.claudiokuenzler.com/monitoring-plugins/check_esxi_hardware.py
+	wget -q https://yanarit.com/check_esxi_hardware.py
 	chown nagios:nagios check_esxi_hardware.py
 	chmod 755 check_esxi_hardware.py
 
