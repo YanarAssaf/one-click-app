@@ -124,3 +124,71 @@ else
     cecho "finished" $boldgreen
     
 fi
+
+mkdir -p /usr/local/nagios/etc/yanarit
+
+cat << 'EOF' > /usr/local/nagios/etc/yanarit/hosts.cfg
+define host {
+    use                     linux-server
+    host_name               esxi1
+    alias                   esxi1
+    address                 10.10.0.1
+}
+
+define host {
+    use                     linux-server
+    host_name               server1
+    alias                   server1
+    address                 10.10.0.2
+}
+EOF
+
+cat << 'EOF' > /usr/local/nagios/etc/yanarit/services.cfg
+
+define service {
+    use                     local-service
+    host_name               esxi1
+    service_description     ESXi
+    check_command           check_esxi
+}
+
+define service {
+    use                     local-service
+    host_name               server1
+    service_description     Users
+    check_command           check_nrpe_3var!check_users!0!1
+	
+}
+
+EOF
+
+cat << 'EOF' > /usr/local/nagios/etc/yanarit/commands.cfg
+
+define command {
+
+    command_name    check_esxi
+    command_line    $USER1$/check_esxi_hardware.py -H $HOSTADDRESS$ -U root -P $USER5$ -r -i Memory,Power
+}
+
+define command {
+
+    command_name    check_nrpe
+    command_line    /usr/lib64/nagios/plugins/check_nrpe -H $HOSTADDRESS$ -c $ARG1$
+}
+
+define command {
+
+    command_name    check_nrpe_3var
+    command_line    /usr/lib64/nagios/plugins/check_nrpe -H $HOSTADDRESS$ -c $ARG1$ -a $ARG2$ $ARG3$
+}
+
+EOF
+
+cecho "Created the following useful configuration objects /usr/local/nagios/etc/yanarit" $boldgreen
+cecho "Run this command for the last few objects" $boldgreen
+echo ""
+
+cecho "
+  echo \"cfg_dir=/usr/local/nagios/etc/yanarit\" >> /usr/local/nagios/etc/nagios.cfg " $boldgreen
+
+cecho "done" $boldgreen
