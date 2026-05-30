@@ -104,7 +104,8 @@ user_input=$(echo "$user_input" | tr '[:upper:]' '[:lower:]')
 # Evaluate the user response
 if [[ "$user_input" == "yes" || "$user_input" == "y" ]]; then
     echo "Starting installation of check_esxi..."
-    dnf install -y -q python3-pip python3-pywbem s-nail python3-packaging >/dev/null
+    dnf install -y -q python3-pip s-nail python3-packaging >/dev/null
+	pip3 install pywbem >/dev/null
 	cd /usr/local/nagios/libexec/
 	wget -q https://www.claudiokuenzler.com/monitoring-plugins/check_esxi_hardware.py
 	chown nagios:nagios check_esxi_hardware.py
@@ -115,8 +116,8 @@ if [[ "$user_input" == "yes" || "$user_input" == "y" ]]; then
 	cecho "
 	  1. enable CIM on ESXi
 	  2. esxcli system wbem set --enable true
-	  3. check_nrpe -H $HOSTADDRESS$ -c $ARG1$
-	  4. check_esxi_hardware.py -H $HOSTADDRESS$ -U root -P $USER5$ -r -i "Memory,Power Supply,IPMI" " $boldgreen
+	  3. check_nrpe -H \$HOSTADDRESS\$ -c \$ARG1\$
+	  4. check_esxi_hardware.py -H \$HOSTADDRESS\$ -U root -P \$USER5\$ -r -i "Memory,Power Supply,IPMI" " $boldgreen
 
     
 else
