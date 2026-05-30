@@ -95,5 +95,31 @@ cecho "
   dnf config-manager --set-enabled crb
   dnf install nrpe nagios-plugins-all " $boldgreen
 
+# check_esxi_hardware
+read -p "Do you want to install check_esxi_hardware? (yes/no): " user_input
 
-cecho "finished" $boldgreen
+# Convert input to lowercase to handle variations like "Yes" or "YES"
+user_input=$(echo "$user_input" | tr '[:upper:]' '[:lower:]')
+
+# Evaluate the user response
+if [[ "$user_input" == "yes" || "$user_input" == "y" ]]; then
+    echo "Starting installation of check_esxi..."
+    dnf install -y -q python3-pip python3-pywbem s-nail python3-packaging >/dev/null
+	cd /usr/local/nagios/libexec/
+	wget -q https://www.claudiokuenzler.com/monitoring-plugins/check_esxi_hardware.py
+	chown nagios:nagios check_esxi_hardware.py
+	chmod 755 check_esxi_hardware.py
+
+	cecho "commnad to install check_esxi_hardware" $boldgreen
+	echo ""
+	cecho "
+	  1. enable CIM on ESXi
+	  2. esxcli system wbem set --enable true
+	  3. check_nrpe -H $HOSTADDRESS$ -c $ARG1$
+	  4. check_esxi_hardware.py -H $HOSTADDRESS$ -U root -P $USER5$ -r -i "Memory,Power Supply,IPMI" " $boldgreen
+
+    
+else
+    cecho "finished" $boldgreen
+    
+fi
