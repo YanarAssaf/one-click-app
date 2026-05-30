@@ -189,6 +189,6 @@ cecho "Run this command for the last few objects" $boldgreen
 echo ""
 
 cecho "
-  echo "cfg_dir=/usr/local/nagios/etc/yanarit" >> /usr/local/nagios/etc/nagios.cfg " $boldgreen
+  echo \"cfg_dir=/usr/local/nagios/etc/yanarit\" >> /usr/local/nagios/etc/nagios.cfg " $boldgreen
 
 cecho "done" $boldgreen
