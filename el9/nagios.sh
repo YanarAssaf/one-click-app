@@ -5,7 +5,7 @@ PRE_PACK="gcc glibc glibc-common perl httpd php wget gd gd-devel s-nail postfix 
 PRE_PACK1="make gettext automake autoconf  net-snmp net-snmp-utils perl-Net-SNMP nrpe nagios-plugins-nrpe"
 EXT_PACK="tar wget vim net-tools htop mtr nload tcpdump rsync bash-completion" 
 
-VER="4.5.12"
+VER="4.5.13"
 USER_FILE="/usr/local/nagios/etc/htpasswd.users"
 USER_NAME="nagiosadmin"
 USER_PASS="admin"
@@ -45,7 +45,7 @@ cd /tmp
 cecho "Downloading and installing Nagios..." $boldyellow
 cd /tmp
 #wget --output-document="nagioscore.tar.gz" $(wget -q -O - https://api.github.com/repos/NagiosEnterprises/nagioscore/releases/latest  | grep '"browser_download_url":' | grep -o 'https://[^"]*')
-wget -q -O nagioscore.tar.gz https://yanarit.com//nagios-4.5.12.tar.gz
+wget -q -O nagioscore.tar.gz https://yanarit.com//nagios-4.5.13.tar.gz
 tar xzf nagioscore.tar.gz
 cd /tmp/nagios-*
 
