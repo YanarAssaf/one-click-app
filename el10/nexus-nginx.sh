@@ -204,7 +204,7 @@ if [ $? -eq 0 ]; then
     cecho "==========================================================" $boldgreen
     
     cecho "\n📌 Access Information:" $boldyellow
-    echo "  • Nexus UI:     http://YOUR_SERVER_IP:8080"
+    echo "  • Nexus UI:     http://YOUR_SERVER_IP:8081"
     echo "  • Default User: admin"
     echo "  • Default Pass: docker exec -it nexus cat /nexus-data/admin.password"
     
