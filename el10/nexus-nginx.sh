@@ -94,7 +94,7 @@ cat <<EOF > "$INSTALL_DIR/docker-compose.yaml"
 services:
   nexus:
     image: sonatype/nexus3
-	container_name: nexus
+    container_name: nexus
     ports:
       - "8081:8081"
       - "5000:5000"
