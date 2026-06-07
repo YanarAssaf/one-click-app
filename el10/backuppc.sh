@@ -51,6 +51,8 @@ INSTALL_DIR=${INSTALL_DIR:-/backuppc}
 # Clean trailing slashes if any
 INSTALL_DIR=$(echo "$INSTALL_DIR" | sed 's:/*$::')
 
+mkdir -p "$INSTALL_DIR"
+
 ############################
 # START DEPLOYMENT
 ############################
