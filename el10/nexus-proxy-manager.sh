@@ -92,7 +92,7 @@ services:
     container_name: nexus-server
     restart: unless-stopped
     ports:
-      - '8080:8080'
+      - '8081:8081'
     volumes:
       - '$INSTALL_DIR/nexus-data:/nexus-data'
     networks:
@@ -109,7 +109,7 @@ if [ $? -eq 0 ]; then
     cecho "==========================================================" $boldgreen
     
     cecho "\n📌 Access Information:" $boldyellow
-    echo "  • Nexus UI:     http://YOUR_SERVER_IP:8080"
+    echo "  • Nexus UI:     http://YOUR_SERVER_IP:8081"
     echo "  • Default User: admin"
     echo "  • Default Pass: docker exec -it nexus cat /nexus-data/admin.password"
     echo ""
