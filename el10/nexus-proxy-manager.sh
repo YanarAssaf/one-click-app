@@ -91,6 +91,8 @@ services:
     image: sonatype/nexus3:latest
     container_name: nexus-server
     restart: unless-stopped
+    ports:
+      - '8080:8080'
     volumes:
       - '$INSTALL_DIR/nexus-data:/nexus-data'
     networks:
@@ -103,30 +105,33 @@ docker compose up -d
 
 if [ $? -eq 0 ]; then
     cecho "==========================================================" $boldgreen
-    cecho " Deployment Successful!" $boldgreen
+    cecho " 🎉 Deployment Successful!" $boldgreen
     cecho "==========================================================" $boldgreen
-    echo "Nginx Proxy Manager Admin UI: http://YOUR_SERVER_IP:81"
-    echo "Default User: admin@example.com"
-    echo "Default Pass: changeme"
+    
+    cecho "\n📌 Access Information:" $boldyellow
+    echo "  • Nexus UI:     http://YOUR_SERVER_IP:8080"
+    echo "  • Default User: admin"
+    echo "  • Default Pass: docker exec -it nexus cat /nexus-data/admin.password"
     echo ""
-    echo "Next Steps to configure Let's Encrypt:"
-    echo "1. Point your Nexus UI & Registry domains in DNS to this server IP."
-    echo "2. Log into the Nginx Proxy Manager Admin UI above."
-    echo "3. Add a Proxy Host for Nexus UI:"
-    echo "   - Domain Name: [Your Nexus Domain]"
-    echo "   - Forward Scheme: http"
-    echo "   - Forward Host: nexus-server"
-    echo "   - Forward Port: 8081"
-    echo "   - Under 'SSL' tab: Request a new Let's Encrypt certificate."
+    cecho "\n🔒 Steps to configure Let's Encrypt" $boldcyan
+    echo "  1. Point your Nexus UI & Registry domains in DNS to this server IP"
+    echo "     ↳ Log into the Nginx Proxy Manager Admin UI http://YOUR_SERVER_IP:81 "
+    echo "  2. Add a Proxy Host for Nexus UI:"
+    echo "     ↳ Domain Name: [Your Nexus Domain]"
+    echo "     ↳ Forward Scheme: http" 
+	echo "     ↳ Forward Host: nexus-server"
+	echo "     ↳ Forward Port: 8080"
+	echo "     ↳ Under 'SSL' tab: Request a new Let's Encrypt certificate."
+    echo "  3. Add a Proxy Host for Docker Registry:"
+    echo "     ↳ Domain Name: [Your Registry Domain]"
+    echo "     ↳ Forward Scheme: http"
+	echo "     ↳ Forward Host: nexus-server"
+	echo "     ↳ Forward Port: [Your Nexus Docker HTTP Connector Port]"
+	echo "     ↳ Under 'SSL' tab: Request a new Let's Encrypt certificate."
+    
     echo ""
-    echo "4. Add a Proxy Host for Docker Registry:"
-    echo "   - Domain Name: [Your Registry Domain]"
-    echo "   - Forward Scheme: http"
-    echo "   - Forward Host: nexus-server"
-    echo "   - Forward Port: [Your Nexus Docker HTTP Connector Port]"
-    echo "   - Under 'SSL' tab: Request a new Let's Encrypt certificate."
     cecho "==========================================================" $boldgreen
 else
-    cecho "Deployment failed. Check docker system logs using 'docker compose logs'." $boldred
+    cecho "❌ Deployment failed. Check docker system logs using 'docker compose logs'." $boldred
     exit 1
 fi
