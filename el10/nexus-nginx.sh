@@ -194,121 +194,37 @@ cd "$INSTALL_DIR" || exit 1
 docker compose up -d
 
 
-cat <<EOF
+cecho "Launching stack containers via Docker Compose..." $boldyellow
+cd "$INSTALL_DIR"
+docker compose up -d
 
-=========================================================================
-NEXUS DEPLOYMENT NOTES
-=========================================================================
+if [ $? -eq 0 ]; then
+    cecho "==========================================================" $boldgreen
+    cecho " Deployment Successful!" $boldgreen
+    cecho "==========================================================" $boldgreen
+    echo "Nexus UI: http://YOUR_SERVER_IP:8080"
+    echo "Default User: admin"
+    echo "Default Pass: - docker exec -it nexus cat /nexus-data/admin.password"
+    echo "DIRECT ACCESS (HTTP)"
+    echo "1. Yum/Dnf clients."
+	echo "   - baseurl=http://REPO_DOMAIN/repository/el10/ "
+	echo "   - dnf install nginx --disablerepo='*' --enablerepo=yanarit-el10 "
+	echo "2. Docker insecure-registries."
+	echo "   - Port : 5000 MUST be configured as this port on nexus registery port"
+	echo "   - echo '{"insecure-registries":["<SERVER-IP>:5000"]}' > /etc/docker/daemon.json"
+	echo "DIRECT ACCESS (HTTPS)"
+    echo "1. CA CERTIFICATE DEPLOYMENT (ALMALINUX / RHEL)"
+    echo "   - rsync -avz $INSTALL_DIR/config/ssl/nexus.crt client:/etc/pki/ca-trust/source/anchors/"
+    echo "   - update-ca-trust"
+    echo ""
+    echo "2. Yum/DNF clients."
+	echo "   - baseurl=https://REPO_DOMAIN/repository/el10/ "
+	echo "   - dnf install nginx --disablerepo='*' --enablerepo=yanarit-el10 "
+	echo "3. Docker repositories behind Nginx."
+	echo "   - Port : 81 MUST be configured as this port or update nginx conf file Type Http"
+    cecho "==========================================================" $boldgreen
+else
+    cecho "Deployment failed. Check docker system logs using 'docker compose logs'." $boldred
+    exit 1
+fi
 
-DIRECT ACCESS (HTTP)
---------------------
-
-Nexus UI:
-  http://<SERVER-IP>:8081
-
-Use direct HTTP access for repositories that do not require the Nginx
-reverse proxy, such as Yum, Apt, Raw, Maven, NPM and other standard
-repository types.
-
-Examples:
-create repo file /etc/yum.repos.d/yanarit.repo
-[yanarit]
-name=Yanarit Nexus Repo
-baseurl=http://NEXUS_DOMAIN:8081/repository/el10/
-enabled=1
-gpgcheck=0
-
-Docker repositories over HTTP:
-  <SERVER-IP>:5000
-  <SERVER-IP>:5001
-
-Docker clients may use the direct Nexus ports if insecure registries are
-allowed in the Docker daemon configuration.
-
-echo '{"insecure-registries":["<SERVER-IP>:5000"]}' > /etc/docker/daemon.json
-
-
-HTTPS ACCESS (RECOMMENDED)
---------------------------
-
-Nexus UI:
-  https://$NEXUS_DOMAIN
-
-Docker Registry:
-  https://$REPO_DOMAIN
-
-The HTTPS endpoints are published through Nginx using the generated SSL
-certificate.
-
-
-IMPORTANT
----------
-
-The generated certificate is a private CA/self-signed certificate.
-
-Before using HTTPS endpoints, import the generated CA certificate on all
-client systems that will access Nexus.
-
-Examples:
-  Yum/DNF clients
-  Docker hosts
-  Linux servers
-  Windows servers
-  Workstations
-  dnf install nginx --disablerepo='*' --enablerepo=yanarit-el10
-
-create repo file /etc/yum.repos.d/yanarit.repo
-[yanarit]
-name=Yanarit Nexus Repo
-baseurl=https://NEXUS_DOMAIN/repository/el10/
-enabled=1
-gpgcheck=0
-
-DOCKER CONFIGURATION
---------------------
-
-For Docker repositories behind Nginx:
-
-  Registry URL:
-    https://$REPO_DOMAIN
-
-  Example Nexus Docker Connector:
-
-    Type : HTTP
-    Port : 81 MUST be configured as this port or update nginx conf file 
-
-Nginx terminates SSL and forwards traffic to the Nexus HTTP connector.
-
-
-EXAMPLES
---------
-
-Yum Repository:
-  https://$NEXUS_DOMAIN/repository/yum/
-
-Docker Login:
-  docker login $REPO_DOMAIN
-
-Docker Push:
-  docker push $REPO_DOMAIN/myimage:latest
-
-Docker Pull:
-  docker pull $REPO_DOMAIN/myimage:latest
-
-CA CERTIFICATE DEPLOYMENT (ALMALINUX / RHEL)
---------------------------------------------
-rsync -avz $INSTALL_DIR/config/ssl/nexus.crt \
-      root@client:/etc/pki/ca-trust/source/anchors/
-	  
-On each client, update the trusted CA store:
-
-  update-ca-trust
-
-=========================================================================
-
-EOF
-
-cecho "docker exec -it nexus cat /nexus-data/admin.password" $boldgreen 
-cecho "Done!" $boldgreen
-
-exit 0
