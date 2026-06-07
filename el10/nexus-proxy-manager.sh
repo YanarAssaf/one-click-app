@@ -111,7 +111,7 @@ if [ $? -eq 0 ]; then
     cecho "\n📌 Access Information:" $boldyellow
     echo "  • Nexus UI:     http://YOUR_SERVER_IP:8081"
     echo "  • Default User: admin"
-    echo "  • Default Pass: docker exec -it nexus cat /nexus-data/admin.password"
+    echo "  • Default Pass: docker exec -it nexus-server cat /nexus-data/admin.password"
     echo ""
     cecho "\n🔒 Steps to configure Let's Encrypt" $boldcyan
     echo "  1. Point your Nexus UI & Registry domains in DNS to this server IP"
