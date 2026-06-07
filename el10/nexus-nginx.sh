@@ -200,31 +200,37 @@ docker compose up -d
 
 if [ $? -eq 0 ]; then
     cecho "==========================================================" $boldgreen
-    cecho " Deployment Successful!" $boldgreen
+    cecho " 🎉 Deployment Successful!" $boldgreen
     cecho "==========================================================" $boldgreen
-    echo "Nexus UI: http://YOUR_SERVER_IP:8080"
-    echo "Default User: admin"
-    echo "Default Pass: - docker exec -it nexus cat /nexus-data/admin.password"
-    echo "DIRECT ACCESS (HTTP)"
-    echo "1. Yum/Dnf clients."
-	echo "   - baseurl=http://REPO_DOMAIN/repository/el10/ "
-	echo "   - dnf install nginx --disablerepo='*' --enablerepo=yanarit-el10 "
-	echo "2. Docker insecure-registries."
-	echo "   - Port : 5000 MUST be configured as this port on nexus registery port"
-	echo "   - echo '{"insecure-registries":["<SERVER-IP>:5000"]}' > /etc/docker/daemon.json"
-	echo "DIRECT ACCESS (HTTPS)"
-    echo "1. CA CERTIFICATE DEPLOYMENT (ALMALINUX / RHEL)"
-    echo "   - rsync -avz $INSTALL_DIR/config/ssl/nexus.crt client:/etc/pki/ca-trust/source/anchors/"
-    echo "   - update-ca-trust"
+    
+    cecho "\n📌 Access Information:" $boldyellow
+    echo "  • Nexus UI:     http://YOUR_SERVER_IP:8080"
+    echo "  • Default User: admin"
+    echo "  • Default Pass: docker exec -it nexus cat /nexus-data/admin.password"
+    
+    cecho "\n🌐 DIRECT ACCESS (HTTP):" $boldcyan
+    echo "  1. Yum/Dnf clients:"
+    echo "     ↳ baseurl=http://REPO_DOMAIN/repository/el10/"
+    echo "     ↳ dnf install nginx --disablerepo='*' --enablerepo=yanarit-el10"
+    echo "  2. Docker insecure-registries:"
+    echo "     ↳ Port 5000 MUST be configured as the Nexus registry port."
+    echo "     ↳ echo '{\"insecure-registries\":[\"<SERVER-IP>:5000\"]}' > /etc/docker/daemon.json"
+    
+    cecho "\n🔒 DIRECT ACCESS (HTTPS):" $boldcyan
+    echo "  1. CA Certificate Deployment (AlmaLinux / RHEL):"
+    echo "     ↳ rsync -avz \$INSTALL_DIR/config/ssl/nexus.crt client:/etc/pki/ca-trust/source/anchors/"
+    echo "     ↳ update-ca-trust"
+    echo "  2. Yum/DNF clients:"
+    echo "     ↳ baseurl=https://REPO_DOMAIN/repository/el10/"
+    echo "     ↳ dnf install nginx --disablerepo='*' --enablerepo=yanarit-el10"
+    echo "  3. Docker repositories behind Nginx:"
+    echo "     ↳ Port 81 MUST be configured or update Nginx conf file (Type HTTP)."
+    
     echo ""
-    echo "2. Yum/DNF clients."
-	echo "   - baseurl=https://REPO_DOMAIN/repository/el10/ "
-	echo "   - dnf install nginx --disablerepo='*' --enablerepo=yanarit-el10 "
-	echo "3. Docker repositories behind Nginx."
-	echo "   - Port : 81 MUST be configured as this port or update nginx conf file Type Http"
     cecho "==========================================================" $boldgreen
 else
-    cecho "Deployment failed. Check docker system logs using 'docker compose logs'." $boldred
+    cecho "❌ Deployment failed. Check docker system logs using 'docker compose logs'." $boldred
     exit 1
 fi
+
 
