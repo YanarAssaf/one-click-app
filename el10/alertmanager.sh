@@ -3,7 +3,7 @@
 ### VARIABLES ###
 PRE_PACK="epel-release"
 EXT_PACK="tar wget vim net-tools htop mtr nload tcpdump rsync bash-completion" 
-VER="0.32.1"
+VER="0.34.1"
 
 # Setup Colours
 boldblack='\E[1;30;40m'
