@@ -41,7 +41,7 @@ dnf -y -q install $EXT_PACK >/dev/null
 
 cecho "Downloading and installing Prometheus..." $boldyellow
 #wget https://github.com/prometheus/prometheus/releases/download/v${VER}/prometheus-${VER}.linux-amd64.tar.gz >/dev/null
-wget https://yanarit.com/prometheus-3.11.3.linux-amd64.tar.gz >/dev/null
+wget https://yanarit.com/prometheus-3.13.4.linux-amd64.tar.gz >/dev/null
 tar xvf prometheus-${VER}.linux-amd64.tar.gz  >/dev/null
 mv prometheus-${VER}.linux-amd64/{prometheus,promtool} /usr/local/bin/ 
 chown prometheus:prometheus /usr/local/bin/{prometheus,promtool}
