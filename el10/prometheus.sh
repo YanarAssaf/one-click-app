@@ -3,7 +3,7 @@
 ### VARIABLES ###
 PRE_PACK="epel-release"
 EXT_PACK="tar wget vim net-tools htop mtr nload tcpdump rsync bash-completion" 
-VER="3.11.3"
+VER="3.13.4"
 #VER=$(curl -sI https://github.com/prometheus/prometheus/releases/latest | grep -i ^location | grep -o v[0-9.]* | sed s/^v//)
 
 # Setup Colours
