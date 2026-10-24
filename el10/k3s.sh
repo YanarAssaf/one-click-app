@@ -103,8 +103,6 @@ fi
 # ==========================================
 # STAGE 2: K3S INSTALLATION MENU & CONFIG
 # ==========================================
-# This section executes cleanly if Stage 2 is chosen directly after a system reboot
-
 echo ""
 cecho "=========================================" "$boldcyan"
 cecho "       K3S INSTALLATION CLUSTER MENU    " "$boldcyan"
@@ -156,36 +154,58 @@ if [ "$OPTION" -eq 4 ]; then
 fi
 
 # ==========================================
+# SAFE LOCAL DOWNLOAD BLOCK
+# ==========================================
+cecho "\nFetching the K3s installation asset safely..." "$boldyellow"
+INSTALLER_TMP=$(mktemp /tmp/k3s-install.XXXXXX.sh)
+
+# Download to local file path
+curl -sfL https://k3s.io -o "$INSTALLER_TMP"
+
+# Verify downloaded asset is a script and not a blocked network HTML page
+if ! head -n 1 "$INSTALLER_TMP" | grep -q '#!'; then
+    cecho "\n[ERROR] Network error: Received an invalid asset from get.k3s.io." "$boldred"
+    cecho "Your network path or router may be blocking traffic to the site." "$boldyellow"
+    rm -f "$INSTALLER_TMP"
+    exit 1
+fi
+
+chmod +x "$INSTALLER_TMP"
+
+# ==========================================
 # K3S INSTALLATION LOGIC
 # ==========================================
 case $OPTION in
     1)
         if [[ "$USE_LB" =~ ^[Yy]$ ]]; then
             cecho "\nStarting K3s HA initialization with External Load Balancer ($TLS_IP)..." "$boldgreen"
-            curl -sfL https://k3s.io | K3S_TOKEN=$YOUR_SECRET sh -s - server --cluster-init --tls-san="$TLS_IP" --node-taint 'node-role.kubernetes.io/control-plane:NoSchedule'
+            K3S_TOKEN=$YOUR_SECRET "$INSTALLER_TMP" s - server --cluster-init --tls-san="$TLS_IP" --node-taint 'node-role.kubernetes.io/control-plane:NoSchedule'
         else
             cecho "\nStarting K3s HA initialization..." "$boldgreen"
-            curl -sfL https://k3s.io | K3S_TOKEN=$YOUR_SECRET sh -s - server --cluster-init --node-taint 'node-role.kubernetes.io/control-plane:NoSchedule'
+            K3S_TOKEN=$YOUR_SECRET "$INSTALLER_TMP" s - server --cluster-init --node-taint 'node-role.kubernetes.io/control-plane:NoSchedule'
         fi
         ;;
     2)
         cecho "\nStarting K3s Standalone installation..." "$boldgreen"
-        curl -sfL https://k3s.io | K3S_TOKEN=$YOUR_SECRET sh -
+        K3S_TOKEN=$YOUR_SECRET "$INSTALLER_TMP"
         ;;
     3)
         if [[ "$USE_LB" =~ ^[Yy]$ ]]; then
             cecho "\nJoining as an additional Master via External Load Balancer ($TLS_IP)..." "$boldgreen"
-            curl -sfL https://k3s.io | K3S_TOKEN=$YOUR_SECRET sh -s - server --server "https://${TLS_IP}:6443" --tls-san="$TLS_IP" --node-taint 'node-role.kubernetes.io/control-plane:NoSchedule'
+            K3S_TOKEN=$YOUR_SECRET "$INSTALLER_TMP" s - server --server "https://${TLS_IP}:6443" --tls-san="$TLS_IP" --node-taint 'node-role.kubernetes.io/control-plane:NoSchedule'
         else
             cecho "\nJoining as an additional Master connecting to $MASTER_IP..." "$boldgreen"
-            curl -sfL https://k3s.io | K3S_TOKEN=$YOUR_SECRET sh -s - server --server "https://${MASTER_IP}:6443" --node-taint 'node-role.kubernetes.io/control-plane:NoSchedule'
+            K3S_TOKEN=$YOUR_SECRET "$INSTALLER_TMP" s - server --server "https://${MASTER_IP}:6443" --node-taint 'node-role.kubernetes.io/control-plane:NoSchedule'
         fi
         ;;
     4)
         cecho "\nJoining as a Worker Agent connecting to $MASTER_IP..." "$boldgreen"
-        curl -sfL https://k3s.io | K3S_TOKEN=$YOUR_SECRET sh -s - agent --server "https://${MASTER_IP}:6443"
+        K3S_TOKEN=$YOUR_SECRET "$INSTALLER_TMP" s - agent --server "https://${MASTER_IP}:6443"
         ;;
 esac
+
+# Cleanup temporary file safely after processing
+rm -f "$INSTALLER_TMP"
 
 # ==========================================
 # POST-INSTALL CONFIGURATION
