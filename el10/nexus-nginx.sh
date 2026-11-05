@@ -2,7 +2,7 @@
 
 ### VARIABLES ###
 PRE_PACK="epel-release"
-EXT_PACK="tar wget vim net-tools htop mtr nload tcpdump rsync bash-completion openssl yum-utils"
+EXT_PACK="tar wget vim net-tools htop mtr nload tcpdump rsync bash-completion cloud-utils-growpart openssl yum-utils"
 VER=""
 
 # Setup Colours
