@@ -2,7 +2,7 @@
 
 ### VARIABLES ###
 PRE_PACK="epel-release dnf-plugins-core"
-EXT_PACK="tar wget vim net-tools htop mtr nload tcpdump rsync bash-completion" 
+EXT_PACK="tar wget vim net-tools htop mtr nload tcpdump rsync bash-completion cloud-utils-growpart" 
 VER=""
 
 # Setup Colours
