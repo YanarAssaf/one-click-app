@@ -2,7 +2,7 @@
 
 ### VARIABLES ###
 PRE_PACK="epel-release"
-EXT_PACK="kernel-modules-extra nfs-utils tar wget vim net-tools htop mtr nload tcpdump rsync bash-completion" 
+EXT_PACK="kernel-modules-extra nfs-utils tar wget vim net-tools htop mtr nload tcpdump rsync bash-completion cloud-utils-growpart" 
 VER=""
 
 # Setup Colours
