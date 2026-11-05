@@ -2,7 +2,7 @@
 
 ### VARIABLES ###
 PRE_PACK="epel-release"
-EXT_PACK="tar wget vim net-tools htop mtr nload tcpdump rsync bash-completion" 
+EXT_PACK="tar wget vim net-tools htop mtr nload tcpdump rsync bash-completion cloud-utils-growpart" 
 VER="1.12.1"
 
 # Setup Colours
